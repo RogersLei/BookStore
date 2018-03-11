@@ -10,76 +10,71 @@
     name: "sales-rank",
     data() {
       return {
-        DataSource: [
-          {
-            type: "成功/励志",
-            sales: 5,
-          },
-          {
-            type: "小说",
-            sales: 20,
-          },
-          {
-            type: "中小学教辅",
-            sales: 36,
-          },
-          {
-            type: "童书",
-            sales: 50,
-          },
-          {
-            type: "育儿/早教",
-            sales: 10,
-          },
-          {
-            type: "动漫/幽默",
-            sales: 20,
-          },
-        ],
+        DataSource: [],
         typeData: [],
         salesData: [],
-        loading: 0,
+        // loading: 0,
       }
     },
     methods: {
       getTypeData(){
-        // this.apiPost('admin/sales/salesTop5').then((res) => {
-        //   if(res.code === 200) {
-        //     this.DataSource = res.data
-        //     this.dealData(this.DataSource)
-        //   }
-        // })
+        this.apiPost('admin/sales/salesTop10').then((res) => {
+          if(res === '' || res === null) {
+            console.log('no data')
+          } else {
+            res.forEach((item, index) => {
+              this.DataSource[index] = {
+                name: item.Book_Name,
+                sales: item.Book_Sales,
+              }
+            })
+            this.dealData(this.DataSource)
+          }
+        })
       },
       dealData(data) {
         this.typeData = data.map((item) => {
-          return item.type
+          return item.name
         })
         this.salesData = data.map((item) => {
           return item.sales
         })
         this.drawLine()
-        this.loading = new Date()
-        console.log(this.loading)
+        // this.loading = new Date()
+        // console.log(this.loading)
       },
       drawLine() {
-        let myChart = this.$echarts.init(document.getElementById('myChart'))
+        let myChart = this.$echarts.init(document.getElementById('myChart'),'light')
         myChart.setOption({
-          title: { text: '当前热销排行' },
+          title: { text: '书籍Top10' },
           tooltip: {},
+          legend: {},
           xAxis: {
-            data: this.typeData
+            data: this.typeData.map((item)=>{
+              return item
+            }),
+            axisLabel: {
+              rotate: -30,
+              fontSize: 10,
+            }
+          },
+          grid: {
+            bottom: '30%',
           },
           yAxis: {},
           series: [{
-            name: '销量',
+            name: '销售量',
             type: 'bar',
-            data: this.salesData
+            data: this.salesData,
+            label: {
+              show: true,
+              position: 'top',
+            }
           }]
         })
       }
     },
     mounted() {
-      console.log(new Date())
       this.getTypeData()
     },
     mixins: [http]

@@ -105,10 +105,26 @@ class Base extends Common
 
     public function updateSort()
     {
-        $data = [
-            "msg" => 'OK',
-            "code" => 200
-        ];
-        return json($data);
+        $book = model('Book');
+        $id = input('id');
+        $type = input('tag');
+        $data = $book->updateSort($id, $type);
+        return $data;
     }
+
+    public function findBookType()
+    {
+        $book = model('book');
+        $data = $book->findBookType();
+        return json_encode($data);
+    }
+
+    public function deleteSort()
+    {
+        $book = model('Book');
+        $id = input('id');
+        $data = $book->deleteSort($id);
+        return $data;
+    }
+
 }

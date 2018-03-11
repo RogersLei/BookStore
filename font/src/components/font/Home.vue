@@ -8,7 +8,7 @@
     </el-col>
     <el-col :span="24" class="hm" style="margin-top: 10px">
       <el-col :span="6">
-        <img src="../../assets/1.jpg" alt="xxx" height="100" width="200">
+        <router-link to="/index/aaa"><img src="../../assets/1.jpg" alt="xxx" height="100" width="200"></router-link>
       </el-col>
       <el-col :span="12">
         <el-autocomplete class="inline-input" v-model="searchBook" :fetch-suggestions="queryBook"
@@ -56,14 +56,7 @@
         </el-card>
       </el-col>
       <!--店长推荐-->
-      <!--<el-tabs v-model="activeName" @tab-click="handleClick">-->
-        <!--<el-tab-pane label="用户管理" name="first">用户管理</el-tab-pane>-->
-        <!--<el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>-->
-        <!--<el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>-->
-        <!--<el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane>-->
-      <!--</el-tabs>-->
     </el-main>
-
     <el-footer></el-footer>
   </el-container>
 </template>
@@ -126,7 +119,7 @@
 
 <style scoped lang="scss">
   .container{
-    min-width: 1100px;
+    min-width: 1250px;
     position: absolute;
     top: 0px;
     bottom: 0px;

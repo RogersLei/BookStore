@@ -8,8 +8,8 @@
       </el-col>
       <el-col :span="4" class="userinfo">
         <el-dropdown trigger="hover">
-          <span class="el-dropdown-link userinfo-inner"><img :src="sysUserAvatar" /> {{sysUserName}}{{sysUserPower}}</span>
-          <el-dropdown-menu slot="dropdown">
+          <span class="el-dropdown-link userinfo-inner">{{sysUserName}}{{sysUserPower}}</span>
+          <el-dropdown-menu slot="dropdown" style="min-width: 100px">
             <el-dropdown-item>我的消息</el-dropdown-item>
             <el-dropdown-item>设置</el-dropdown-item>
             <el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>

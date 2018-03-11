@@ -27,6 +27,7 @@ const apiOpration = {
       //console.log(this.dialog)
     },
     handleDelete (index, row, locate) {
+      console.log(locate)
       this.$confirm('此操作将永久删除该行数据, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -43,7 +44,7 @@ const apiOpration = {
             })
             this.$router.go(this.$route.path)   //暂时这么刷新
           } else {
-            this.$message.error('删除数据失败')
+            this.$message.error('删除数据失败'+res.msg)
           }
         })
       }).catch(() => {
@@ -63,7 +64,7 @@ const apiOpration = {
     handleMakeEdit(locate) {
       //console.log(locate)
       let obj = this.dialog
-      //console.log(obj)
+      // console.log(obj)
       this.apiPost('admin/base/update'+locate,obj).then((res)=>{
         if(res.code == 200){
           this.$message({

@@ -1,5 +1,5 @@
 <template>
-  <el-container>
+  <el-container style="min-width: 1020px">
     <el-header>
       <el-autocomplete placeholder="请输入内容" suffix-icon="el-icon-search"
                        v-model="searchBook" :fetch-suggestions="queryBook"  @select="handleSelect">
@@ -20,6 +20,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="price" label="价格" sortable></el-table-column>
+        <el-table-column prop="sales" label="销量" sortable></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -87,7 +88,7 @@
         loadBook () {  //加载后获取服务器所有书名  可以与tableData一同
           this.apiPost('admin/base/findBook').then((res)=>{
             if(res == '' || res == null){
-              console.log('data error')
+              console.log('no data ')
             } else {
               let tags = []
               res.forEach((item, index) => {
@@ -99,8 +100,9 @@
                   id: item.Book_ID,
                   name: item.Book_Name,
                   num: item.Book_Stock,
-                  tag: item.Book_Type,
-                  price: item.Book_Price
+                  tag: item.BookType_Name,
+                  price: item.Book_Price,
+                  sales: item.Book_Sales,
                 }
                 tags[index] = item.Book_Type
                 tags = Array.from(new Set(tags))
@@ -164,5 +166,4 @@
 </script>
 
 <style scoped>
-
 </style>

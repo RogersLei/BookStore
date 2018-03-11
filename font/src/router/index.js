@@ -6,8 +6,8 @@ import NotFound from '@/components/404.vue'
 
 import Main from '@/components/aaa.vue'
 
-import UserList from '@/components/admin/User/UserList.vue'
-import UserAdd from '@/components/admin/User/UserAdd.vue'
+import EmpList from '@/components/admin/User/UserList.vue'
+import EmpAdd from '@/components/admin/User/UserAdd.vue'
 import BookList from '@/components/admin/Book/BookList.vue'
 import BookSort from '@/components/admin/Book/BookSort.vue'
 import SalesRank from '@/components/admin/Sale/SalesRank.vue'
@@ -26,8 +26,8 @@ let routes = [
     name: '员工',
     iconCls: '',//图标样式class
     children: [
-      { path: '/userM', component: UserAdd, name: '添加员工' },
-      { path: '/userL', component: UserList, name: '员工列表' }
+      { path: '/userM', component: EmpAdd, name: '添加员工' },
+      { path: '/userL', component: EmpList, name: '员工列表' }
     ]
   },
   {
@@ -66,10 +66,12 @@ let routes = [
     path: '/index',
     name: 'Index',
     component: Index,
-    hidden: true
+    hidden: true,
   },
   {
-    path: '/index/'
+    path: '/index/aaa',
+    name: 'aaa',
+    hidden: true,
   },
 
   {//页面错误信息
