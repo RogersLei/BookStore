@@ -12,6 +12,7 @@ import BookList from '@/components/admin/Book/BookList.vue'
 import BookSort from '@/components/admin/Book/BookSort.vue'
 import SalesRank from '@/components/admin/Sale/SalesRank.vue'
 import SalesCount from '@/components/admin/Sale/SalesCount.vue'
+import FontHome from '@/components/font/show/Home.vue'
 
 let routes = [
   {//后台管理界面start
@@ -21,7 +22,7 @@ let routes = [
     hidden: true
   },
   {
-    path: '/',
+    path: '/admin',
     component: Home,
     name: '员工',
     iconCls: '',//图标样式class
@@ -31,7 +32,7 @@ let routes = [
     ]
   },
   {
-    path: '/',
+    path: '/admin',
     component: Home,
     name: '书籍',
     iconCls: '',
@@ -41,7 +42,7 @@ let routes = [
     ]
   },
   {
-    path: '/',
+    path: '/admin',
     component: Home,
     name: '前台',
     iconCls: '',
@@ -51,7 +52,7 @@ let routes = [
     ]
   },
   {
-    path: '/',
+    path: '/admin',
     component: Home,
     name: '销售',
     iconCls: '',
@@ -67,12 +68,17 @@ let routes = [
     name: 'Index',
     component: Index,
     hidden: true,
+    children: [
+      {
+        path: '/index',
+        components: {
+          Home: FontHome,
+        },
+        hidden: true,
+      },
+    ]
   },
-  {
-    path: '/index/aaa',
-    name: 'aaa',
-    hidden: true,
-  },
+
 
   {//页面错误信息
     path: '/404',

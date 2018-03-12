@@ -8,7 +8,7 @@
     </el-col>
     <el-col :span="24" class="hm" style="margin-top: 10px">
       <el-col :span="6">
-        <router-link to="/index/aaa"><img src="../../assets/1.jpg" alt="xxx" height="100" width="200"></router-link>
+        <router-link to="/index"><img src="../../assets/1.jpg" alt="xxx" height="100" width="200"></router-link>
       </el-col>
       <el-col :span="12">
         <el-autocomplete class="inline-input" v-model="searchBook" :fetch-suggestions="queryBook"
@@ -17,46 +17,14 @@
         </el-autocomplete>
       </el-col>
       <el-col :span="6">
-        <el-button type="danger" icon="el-icon-goods">购物车 {{GoodsNum}}</el-button>
+        <el-button type="" style="margin-right: 0">全部商品</el-button>
+        <el-button type="danger" icon="el-icon-goods" style="margin-left: 0">购物车 {{GoodsNum}}</el-button>
         <el-button type="" style="margin-left: 0">我的订单</el-button>
       </el-col>
     </el-col>
 
-    <el-main>
-      <!--轮播图-->
-      <el-carousel trigger="click" height="250px" type="card">
-        <el-carousel-item v-for="item in imgs" :key="item">
-          <!--{{item}}-->
-          <img src="../../assets/banner/banner1.jpg" alt="">
-          <!--<img :src="item.imgUrl" alt="">-->
-        </el-carousel-item>
-      </el-carousel>
-      <!--首页显示-->
-      <el-col :span="4" v-for="(o, index) in 5" :key="o" :offset="index > 0 ? 1 : 0">
-        <!--190*315-->
-        <el-card :body-style="{ padding: '0px' }">
-          <img src="../../assets/banner/banner1.jpg" class="image">
-          <div style="padding: 0px;">
-            <span>好吃的汉堡</span>
-            <div class="bottom clearfix">
-              <time class="time">{{1}}</time>
-              <el-button type="text" class="button">操作按钮</el-button>
-            </div>
-          </div>
-        </el-card>
-        <el-card :body-style="{ padding: '0px' }">
-          <img src="../../assets/banner/banner1.jpg" class="image">
-          <div style="padding: 0px;">
-            <span>好吃的汉堡</span>
-            <div class="bottom clearfix">
-              <time class="time">{{1}}</time>
-              <el-button type="text" class="button">操作按钮</el-button>
-            </div>
-          </div>
-        </el-card>
-      </el-col>
-      <!--店长推荐-->
-    </el-main>
+    <router-view name="Home"></router-view>
+
     <el-footer></el-footer>
   </el-container>
 </template>
@@ -72,12 +40,6 @@
             searchBook: '',
             GoodsNum: 0,
             activeName: 'second',
-            imgs: [
-              {imgUrl: '../../assets/banner/banner1.jpg'},
-              {imgUrl: '../../assets/banner/banner2.jpg'},
-              {imgUrl: '../../assets/banner/banner3.jpg'},
-              {imgUrl: '../../assets/banner/banner4.jpg'}
-            ],
         // tags: []
           }
       },
@@ -110,7 +72,7 @@
         }
       },
       mounted() {
-        this.loadBook()
+        // this.loadBook()
       },
       mixins: [http, common]
 

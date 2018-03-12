@@ -34,7 +34,7 @@
         </el-form-item>
         <el-form-item style="width: 100%">
           <el-select v-model="dialog.tag">
-            <el-option v-for="item in tagData" :value="item.value"></el-option>
+            <el-option v-for="item in tagData" :value="item.value" :key="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item style="width: 100%">
