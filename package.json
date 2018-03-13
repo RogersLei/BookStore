@@ -2,15 +2,12 @@
   "name": "books",
   "version": "0.0.1",
   "dependencies": {},
+  "devDependencies": {
+    "cz-conventional-changelog": "^2.1.0"
+  },
   "config": {
-    "ghooks": {
-      "commit-msg": "./validate-commit-msg.js"
-    },
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
-  },
-  "devDependencies": {
-    "cz-conventional-changelog": "^2.1.0"
   }
 }
