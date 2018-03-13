@@ -13,6 +13,7 @@ import BookSort from '@/components/admin/Book/BookSort.vue'
 import SalesRank from '@/components/admin/Sale/SalesRank.vue'
 import SalesCount from '@/components/admin/Sale/SalesCount.vue'
 import FontHome from '@/components/font/show/Home.vue'
+import Goods from '@/components/font/show/Goods.vue'
 
 let routes = [
   {//后台管理界面start
@@ -76,6 +77,13 @@ let routes = [
         },
         hidden: true,
       },
+      {
+        path: '/index/goods',
+        components: {
+          Home: Goods,
+        },
+        hidden: true,
+      }
     ]
   },
 

@@ -1,13 +1,12 @@
 <template>
   <div>
-    <el-button type="primary">用户首页</el-button>
+    aaa
   </div>
-
 </template>
 
 <script>
   export default {
-
+    name: "goods"
   }
 </script>
 

@@ -17,9 +17,9 @@
         </el-autocomplete>
       </el-col>
       <el-col :span="6">
-        <el-button type="" style="margin-right: 0">全部商品</el-button>
+        <router-link to="/index/goods"><el-button type="" style="margin-right: 0">全部商品</el-button></router-link>
         <el-button type="danger" icon="el-icon-goods" style="margin-left: 0">购物车 {{GoodsNum}}</el-button>
-        <el-button type="" style="margin-left: 0">我的订单</el-button>
+        <el-button type="" style="margin-left: 0">个人中心</el-button>
       </el-col>
     </el-col>
 
@@ -81,7 +81,7 @@
 
 <style scoped lang="scss">
   .container{
-    min-width: 1250px;
+    min-width: 1400px;
     position: absolute;
     top: 0px;
     bottom: 0px;

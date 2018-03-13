@@ -37,7 +37,7 @@ router.beforeEach((to, from, next) => {
   let user = JSON.parse(sessionStorage.getItem('user')); //获取session中用户信息
   // console.log(to.path)
   // console.log(/\/index\/*/i.test(to.path))
-  if (/\/index\/*/i.test(to.path)) {
+  if (/^\/index\/*/i.test(to.path)) {
     next();
     return;
   }
