@@ -80,6 +80,15 @@ class Base extends Common
        return json_encode($data);
     }
 
+    public function findBookByID()
+    {
+        $book = model('book');
+        $str = file_get_contents("php://input");
+        $id = json_decode($str,true)['id'];
+        $data = $book->findBookByID($id);
+        return json_encode($data);
+    }
+
     public function updateBook()
     {
         $book = model('Book');

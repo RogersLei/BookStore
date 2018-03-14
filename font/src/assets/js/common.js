@@ -151,6 +151,15 @@ const apiOpration = {
       this.$router.push({
         path: '/index'
       })
+    },
+  
+    showInfo(id) {
+      console.log(id)
+      this.$router.push(`/index/goods?id=${id}`)
+      // console.log(this.$route.query)
+    },
+    addToCart(id,num=1) {
+    
     }
   },
   mixins: [http]

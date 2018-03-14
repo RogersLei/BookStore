@@ -1,9 +1,9 @@
 <template>
   <el-container class="container">
     <el-col :span="24" class="hh">
-      <el-col :span="6" :offset="18">
-        <el-button type="text" size="medium">登陆</el-button>
-        <el-button type="text" size="medium">注册</el-button>
+      <el-col :span="6" :offset="18" style="margin-top: 8px;">
+        <el-button type="primary" size="medium" >登陆</el-button>
+        <el-button type="primary" size="medium" >注册</el-button>
       </el-col>
     </el-col>
     <el-col :span="24" class="hm" style="margin-top: 10px">
@@ -17,12 +17,13 @@
         </el-autocomplete>
       </el-col>
       <el-col :span="6">
-        <router-link to="/index/goods"><el-button type="" style="margin-right: 0">全部商品</el-button></router-link>
-        <el-button type="danger" icon="el-icon-goods" style="margin-left: 0">购物车 {{GoodsNum}}</el-button>
-        <el-button type="" style="margin-left: 0">个人中心</el-button>
+        <router-link to="/index/all"><el-button type="" style="margin-right: 0">全部商品</el-button></router-link>
+
+        <router-link to="/index/user/cart"><el-button type="danger" icon="el-icon-goods" style="margin-left: 0">购物车 <span style="margin-left: 3px">{{GoodsNum}}</span></el-button></router-link>
+
+        <router-link to="/index/user/info"><el-button type="" style="margin-left: 0" >个人中心</el-button></router-link>
       </el-col>
     </el-col>
-
     <router-view name="Home"></router-view>
 
     <el-footer></el-footer>
@@ -38,7 +39,7 @@
           return {
             books: [],
             searchBook: '',
-            GoodsNum: 0,
+            GoodsNum: 3,
             activeName: 'second',
         // tags: []
           }
@@ -69,10 +70,14 @@
         },
         handleClick(tab, event) {
           console.log(tab, event);
+        },
+        addToCart(id) {
+          this.GoodsNum++
         }
       },
       mounted() {
         // this.loadBook()
+        // console.log(this.$route.params)
       },
       mixins: [http, common]
 

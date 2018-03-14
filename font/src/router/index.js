@@ -14,6 +14,12 @@ import SalesRank from '@/components/admin/Sale/SalesRank.vue'
 import SalesCount from '@/components/admin/Sale/SalesCount.vue'
 import FontHome from '@/components/font/show/Home.vue'
 import Goods from '@/components/font/show/Goods.vue'
+import All from '@/components/font/show/All.vue'
+import Cart from '@/components/font/user/Cart.vue'
+import User from '@/components/font/User/User.vue'
+import Order from '@/components/font/User/OrderList.vue'
+import Address from '@/components/font/User/AddressList.vue'
+import Info from '@/components/font/User/Info.vue'
 
 let routes = [
   {//后台管理界面start
@@ -83,7 +89,38 @@ let routes = [
           Home: Goods,
         },
         hidden: true,
-      }
+      },
+      {
+        path: '/index/all',
+        components: {
+          Home: All,
+        },
+        hidden: true,
+      },
+      {
+        path: '/index/user/:id',
+        component: User,
+        children: [
+          {
+            path: 'info',
+            component: {
+              UserAll: Info
+            }
+          },
+          {
+            path: 'order',
+            component: Order,
+          },
+          {
+            path: 'cart',
+            component: Cart,
+          },
+          {
+            path: 'address',
+            component: Address,
+          }
+        ],
+      },
     ]
   },
 

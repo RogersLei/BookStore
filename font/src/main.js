@@ -10,11 +10,12 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
 import echarts from 'echarts'
-
+import Lazyload from 'vue-lazyload'
 //import http from './assets/js/http'
 
 Vue.use(ElementUI)
 Vue.use(VueRouter)
+Vue.use(Lazyload)
 
 Vue.prototype.$echarts = echarts
 //Vue.use(ElementUI, { locale })
@@ -37,7 +38,7 @@ router.beforeEach((to, from, next) => {
   let user = JSON.parse(sessionStorage.getItem('user')); //获取session中用户信息
   // console.log(to.path)
   // console.log(/\/index\/*/i.test(to.path))
-  if (/^\/index\/*/i.test(to.path)) {
+  if (/\/index\/*/i.test(to.path)) {
     next();
     return;
   }

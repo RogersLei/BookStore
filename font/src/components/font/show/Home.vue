@@ -17,8 +17,8 @@
           <div style="padding: 0px;">
             <span>{{item.name.length>16?item.name.substring(0,16)+'...':item.name}}</span>
             <div class="bottom clearfix">
-              <time class="time">{{1}}</time>
-              <el-button type="text" class="button">操作按钮</el-button>
+              <el-button type="primary" class="button" @click="showInfo(item.id)">查看详情</el-button>
+              <el-button type="danger" class="button">加入购物车</el-button>
             </div>
           </div>
         </el-card>
@@ -29,8 +29,8 @@
           <div style="padding: 0px;">
             <span>{{item.name.length>16?item.name.substring(0,16)+'...':item.name}}</span>
             <div class="bottom clearfix">
-              <time class="time">{{1}}</time>
-              <el-button type="text" class="button">操作按钮</el-button>
+              <el-button type="primary" class="button" @click="showInfo(item.id)">查看详情</el-button>
+              <el-button type="danger" class="button">加入购物车</el-button>
             </div>
           </div>
         </el-card>
@@ -41,8 +41,8 @@
           <div style="padding: 0px;">
             <span>{{item.name.length>16?item.name.substring(0,16)+'...':item.name}}</span>
             <div class="bottom clearfix">
-              <time class="time">{{1}}</time>
-              <el-button type="text" class="button">操作按钮</el-button>
+              <el-button type="primary" class="button" @click="showInfo(item.id)">查看详情</el-button>
+              <el-button type="danger" class="button" @click="addToCart(item.id)">加入购物车</el-button>
             </div>
           </div>
         </el-card>
@@ -54,7 +54,9 @@
 
 <script>
   import http from '../../../assets/js/http'
+  import common from '../../../assets/js/common'
   export default {
+    name: "home",
     data() {
       return {
         loading: false,
@@ -73,6 +75,8 @@
         this.apiPost('admin/sales/salesTop10').then((res) => {
           if(res === '' || res === null) {
             console.log('no data')
+            this.loading = false
+            this.$message.error('没有数据，请联系数据库管理员')
           } else {
 
             res.forEach((item, index) => {
@@ -96,7 +100,7 @@
       this.loadBook()
       this.loadBanner()
     },
-    mixins: [http],
+    mixins: [http,common]
   }
 </script>
 
