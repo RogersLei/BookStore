@@ -36,13 +36,13 @@
             this.$message.error('没有数据，请联系数据库管理员')
           } else {
             res.forEach((item, index) => {
-              this.DataSource[index] = {
+              this.DataSource.push({
                 id: item.Book_ID,
                 name: item.Book_Name,
                 sales: item.Book_Sales,
                 src: item.Book_Img,
                 price: item.Book_Price,
-              }
+              })
             })
           }
         })
