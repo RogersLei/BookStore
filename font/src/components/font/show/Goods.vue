@@ -48,15 +48,15 @@
             console.log('no data')
             this.$message.error('没有数据，请联系数据库管理员')
           } else {
-              this.DataSource = {
-                id: res.Book_ID,
-                name: res.Book_Name,
-                sales: res.Book_Sales,
-                src: res.Book_Img,
-                price: res.Book_Price,
-                des: res.Book_Des.substr(0,16)+'...',
-                stock: res.Book_Stock,
-              }
+            this.DataSource = {
+              id: res[0].Book_ID,
+              name: res[0].Book_Name,
+              sales: res[0].Book_Sales,
+              src: res[0].Book_Img,
+              price: res[0].Book_Price,
+              des: res[0].Book_Des.substr(0,16)+'...',
+              stock: res[0].Book_Stock,
+            }
           }
         })
       },

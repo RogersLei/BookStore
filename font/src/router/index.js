@@ -97,30 +97,36 @@ let routes = [
         },
         hidden: true,
       },
+      // {
+      //   path: '/index/user',
+      //   component: {
+      //     Home: User,
+      //   },
+      //   children: [
+      //     {
+      //       path: 'info',
+      //       component: {
+      //         UserAll: Info
+      //       }
+      //     },
+      //     {
+      //       path: 'order',
+      //       component: Order,
+      //     },
+      //     {
+      //       path: 'cart',
+      //       component: Cart,
+      //     },
+      //     {
+      //       path: 'address',
+      //       component: Address,
+      //     }
+      //   ],
+      // },
       {
-        path: '/index/user/:id',
+        path: '/index/user',
         component: User,
-        children: [
-          {
-            path: 'info',
-            component: {
-              UserAll: Info
-            }
-          },
-          {
-            path: 'order',
-            component: Order,
-          },
-          {
-            path: 'cart',
-            component: Cart,
-          },
-          {
-            path: 'address',
-            component: Address,
-          }
-        ],
-      },
+      }
     ]
   },
 

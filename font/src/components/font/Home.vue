@@ -24,6 +24,7 @@
         <router-link to="/index/user/info"><el-button type="" style="margin-left: 0" >个人中心</el-button></router-link>
       </el-col>
     </el-col>
+
     <router-view name="Home"></router-view>
 
     <el-footer></el-footer>
