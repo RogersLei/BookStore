@@ -24,9 +24,7 @@
         {
             try
             {
-                $res =  Db::table('Book')
-                            ->where('Book_ID',$id)
-                            ->find();
+                $res =  Db::query('SELECT * FROM Book,Book_Type where Book_TypeID=BookType_ID and Book_ID=:id',['id'=>$id]);
             } catch (Exception $e)
              {
                  $res = ["code" => 0,"msg" => $e->getMessage()];

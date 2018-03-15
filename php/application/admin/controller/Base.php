@@ -83,8 +83,7 @@ class Base extends Common
     public function findBookByID()
     {
         $book = model('book');
-        $str = file_get_contents("php://input");
-        $id = json_decode($str,true)['id'];
+        $id = input('id');
         $data = $book->findBookByID($id);
         return json_encode($data);
     }
