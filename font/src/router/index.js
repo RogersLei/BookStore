@@ -97,36 +97,42 @@ let routes = [
         },
         hidden: true,
       },
-      // {
-      //   path: '/index/user',
-      //   component: {
-      //     Home: User,
-      //   },
-      //   children: [
-      //     {
-      //       path: 'info',
-      //       component: {
-      //         UserAll: Info
-      //       }
-      //     },
-      //     {
-      //       path: 'order',
-      //       component: Order,
-      //     },
-      //     {
-      //       path: 'cart',
-      //       component: Cart,
-      //     },
-      //     {
-      //       path: 'address',
-      //       component: Address,
-      //     }
-      //   ],
-      // },
       {
-        path: '/index/user',
-        component: User,
-      }
+        path: '/index/user/',
+        components: {
+          Home: User,
+        },
+        children: [
+          {
+            path: 'info',
+            name: '个人信息',
+            components: {
+              UserAll: Info
+            }
+          },
+          {
+            path: 'order',
+            name: '订单信息',
+            components: {
+              UserAll: Order
+            }
+          },
+          {
+            path: 'cart',
+            name: '购物清单',
+            components: {
+              UserAll: Cart
+            }
+          },
+          {
+            path: 'address',
+            name: '配送地址',
+            components: {
+              UserAll: Address
+            }
+          }
+        ],
+      },
     ]
   },
 

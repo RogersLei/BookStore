@@ -27,7 +27,7 @@
 
     <router-view name="Home"></router-view>
 
-    <el-footer></el-footer>
+    <el-footer>aaa</el-footer>
   </el-container>
 </template>
 
