@@ -1,9 +1,13 @@
 <template>
   <el-container class="container">
     <el-col :span="24" class="hh">
-      <el-col :span="6" :offset="18" style="margin-top: 8px;">
-        <el-button type="primary" size="medium" >登陆</el-button>
-        <el-button type="primary" size="medium" >注册</el-button>
+      <el-col :span="6" :offset="18" style="margin-top: 8px;" v-if="!isLogin">
+        <a @click="handleLogin">登陆</a>
+        <a @click="handleReg">注册</a>
+      </el-col>
+      <el-col :span="4" :offset="20" style="margin-top: 8px; color: #c1c1c1; font-size: 12px" v-else>
+        <span>{{user.nickname}}</span>
+        <a href="javascript:void(0);" @click="exitLogin">退出</a>
       </el-col>
     </el-col>
     <el-col :span="24" class="hm" style="margin-top: 10px">
@@ -28,6 +32,40 @@
     <router-view name="Home"></router-view>
 
     <el-footer>aaa</el-footer>
+    <el-dialog  title="登陆" :visible.syc="dialogVisibleLog" @close="resetLogin('login')">
+      <el-form :model="login" ref="login" label-width="120px">
+        <el-form-item label="账户名" prop="account">
+          <el-input type="text" v-model="login.account"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="pass">
+          <el-input type="password" v-model="login.pass"></el-input>
+        </el-form-item>
+        <el-form-item style="width: 100%">
+          <el-button type="info" @click="resetLogin('login')">取消</el-button>
+          <el-button type="primary" @click="submitLogin()">登陆</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+    <el-dialog  title="注册" :visible.syc="dialogVisibleReg" @close="resetReg('register')">
+      <el-form :model="register" :rules="rulesReg" ref="register" label-width="120px">
+        <el-form-item label="昵称" prop="name">
+          <el-input type="text" v-model="register.name" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="账号" prop="account">
+          <el-input type="text" v-model="register.account" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="pass">
+          <el-input type="password" v-model="register.pass" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码" prop="checkPass">
+          <el-input type="password" v-model="register.checkPass" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item style="width: 100%">
+          <el-button type="info" @click="resetReg('register')">取消</el-button>
+          <el-button type="primary" @click="submitReg('register')">注册</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </el-container>
 </template>
 
@@ -37,13 +75,59 @@
     export default {
       name: "home",
       data() {
-          return {
-            books: [],
-            searchBook: '',
-            GoodsNum: 3,
-            activeName: 'second',
-        // tags: []
+        var validatePass = (rule, value, callback) => {
+          if (value === '') {
+            callback(new Error('请输入密码'));
+          } else {
+            if (this.register.checkPass !== '') {
+              this.$refs.register.validateField('checkPass');
+            }
+            callback();
           }
+        };
+        var validatePass2 = (rule, value, callback) => {
+          if (value === '') {
+            callback(new Error('请再次输入密码'));
+          } else if (value !== this.register.pass) {
+            callback(new Error('两次输入密码不一致!'));
+          } else {
+            callback();
+          }
+        };
+        return {
+          books: [],
+          searchBook: '',
+          GoodsNum: 3,
+          activeName: 'second',
+          isLogin: false,
+          dialogVisibleLog: false,
+          dialogVisibleReg: false,
+          login: {
+            account: '',
+            pass: ''
+          },
+          register: {
+            name: '',
+            account: '',
+            pass: '',
+            checkPass: ''
+          },
+          rulesReg: {
+            name: [
+              { trigger: 'blur', required: true, message: '请输入昵称' }
+            ],
+            account: [
+              { trigger: 'blur', required: true, message: '请输入账户名' }
+            ],
+            pass: [
+              { validator: validatePass, trigger: 'blur', required: true }
+            ],
+            checkPass: [
+              { validator: validatePass2, trigger: 'blur', required: true }
+            ],
+          },
+          user: {},
+        }
       },
       methods: {
         loadBook () {
@@ -74,11 +158,100 @@
         },
         addToCart(id) {
           this.GoodsNum++
+        },
+
+        handleLogin() {
+          this.dialogVisibleLog = true
+        },
+        resetLogin() {
+          this.login = {
+            account: '',
+            pass: ''
+          }
+          this.dialogVisibleLog = false
+        },
+        submitLogin() {
+          let user = {
+            account: this.login.account,
+            pass: this.login.pass
+          }
+          this.apiPost('font/base/login',user).then((res) => {
+            if(res.code == 200){
+              user.name = res.name
+              sessionStorage.setItem('user', JSON.stringify(user));
+              this.dialogVisibleLog = false
+              this.isLogin = true
+              this.user = {
+                nickname: user.name,
+              }
+            } else {
+              this.$message.error(res.msg)
+            }
+          })
+        },
+
+        handleReg() {
+          this.dialogVisibleReg = true
+        },
+        resetReg(form) {
+          this.$refs[form].resetFields();
+          this.dialogVisibleReg = false
+        },
+        submitReg(form) {
+          this.$refs[form].validate((valid) => {
+            if (valid) {
+              let user = {
+                nickname: this.register.name,
+                account: this.register.account,
+                pwd: this.register.pass
+              }
+              this.apiPost('font/base/register', user).then((res)=>{
+                if(res.code == 200){
+                  this.$message({
+                    message: '注册成功',
+                    type: 'success'
+                  })
+                  this.dialogVisibleReg = false
+                  this.dialogVisibleLog = true
+                }
+                else {
+                  this.$message.error(res.msg)
+                }
+              })
+            } else {
+              this.$message.error('添加失败，请确认信息是否合法');
+              return false;
+            }
+          })
+
+        },
+
+        exitLogin() {
+          var _this = this;
+          this.$confirm('确认退出吗?', '提示', {
+            //type: 'warning'
+          }).then(() => {
+            sessionStorage.removeItem('user');
+            this.user = {}
+            this.isLogin = false
+            _this.$router.push('/index');
+          }).catch(() => {
+
+          });
         }
+
       },
       mounted() {
-        // this.loadBook()
-        // console.log(this.$route.params)
+        let user = JSON.parse(sessionStorage.getItem('user'))
+        if(user){
+          this.isLogin = true
+          this.user = {
+            nickname: user.name
+          }
+        } else {
+          this.isLogin = false
+        }
+
       },
       mixins: [http, common]
 
@@ -93,8 +266,8 @@
     bottom: 0px;
     width: 100%;
     .hh {
-      height: 30px;
-      line-height: 30px;
+      height: 20px;
+      line-height: 20px;
     }
     .hm {
       height: 100px;
@@ -115,5 +288,10 @@
 
   .el-carousel__item:nth-child(2n+1) {
     background-color: #d3dce6;
+  }
+
+  a{
+    color: #c1c1c1;
+    text-decoration: none;
   }
 </style>

@@ -50,7 +50,6 @@
     },
     mounted(){
       this.loadBook()
-      // console.log(this.$route)
     },
     mixins: [http,common]
   }

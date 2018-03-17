@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     LoginAdmin() {
-      let user = {
+      let emp = {
         account: this.ruleForm2.account,
         checkPass: this.ruleForm2.checkPass,
       }
@@ -45,14 +45,14 @@ export default {
       let date = Y +'-' + M.substring(M.length-2, M.length) + '-'+D.substring(D.length-2, D.length) + ' '
         + h.substring(h.length-2, h.length) + ':' + m.substring(m.length-2, m.length) + ':'
         + s.substring(s.length-2, s.length)
-      user.time = date
+      emp.time = date
       let _this = this
-      this.apiPost('admin/base/login',user).then((res) => {
+      this.apiPost('admin/base/login',emp).then((res) => {
         if(res.code == 200){
-          user.power = res.power
-          sessionStorage.setItem('user', JSON.stringify(user));
+          emp.power = res.power
+          sessionStorage.setItem('emp', JSON.stringify(emp));
           if(this.checked){
-            localStorage.setItem('user', JSON.stringify(user));
+            localStorage.setItem('emp', JSON.stringify(emp));
           }
           _this.$router.push({
             path: '/userL'
@@ -65,11 +65,11 @@ export default {
 
     },
     loadEmp() {
-      let user = JSON.parse(localStorage.getItem('user'))
-      if(user != null){
+      let emp = JSON.parse(localStorage.getItem('emp'))
+      if(emp != null){
         this.ruleForm2 = {
-          'account': user.account,
-          'checkPass': user.checkPass
+          'account': emp.account,
+          'checkPass': emp.checkPass
         }
       }
 

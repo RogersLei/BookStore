@@ -15,7 +15,6 @@ const apiOpration = {
 
     handleEdit (index, row) {
       this.dialogVisible = true
-      //console.log(index, row)
       this.dialog = {
         id: row.id,
         name: row.name,
@@ -24,10 +23,8 @@ const apiOpration = {
         tag: row.tag,
         tel: row.tel
       }
-      //console.log(this.dialog)
     },
     handleDelete (index, row, locate) {
-      console.log(locate)
       this.$confirm('此操作将永久删除该行数据, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -58,13 +55,11 @@ const apiOpration = {
       this.dialogVisible = false
       this.$message({
         type: 'info',
-        message: '已取消编辑'
+        message: '已取消'
       })
     },
     handleMakeEdit(locate) {
-      //console.log(locate)
       let obj = this.dialog
-      // console.log(obj)
       this.apiPost('admin/base/update'+locate,obj).then((res)=>{
         if(res.code == 200){
           this.$message({
@@ -147,16 +142,13 @@ const apiOpration = {
       })
     },
     handleGoHome () {
-      console.log(1)
       this.$router.push({
         path: '/index'
       })
     },
   
     showInfo(id) {
-      console.log(id)
       this.$router.push(`/index/goods?id=${id}`)
-      // console.log(this.$route.query)
     },
     addToCart(id,num=1) {
     

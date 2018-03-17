@@ -90,8 +90,7 @@
         this.$confirm('确认退出吗?', '提示', {
           //type: 'warning'
         }).then(() => {
-          sessionStorage.removeItem('user');
-          localStorage.removeItem('user');
+
           _this.$router.push('/login');
         }).catch(() => {
 
@@ -108,15 +107,11 @@
       }
     },
     mounted() {
-      var user = sessionStorage.getItem('user');
-      //console.log(user)
-      //console.log(this.$route)
-      //console.log(this.$router)
-
-      if (user) {
-        user = JSON.parse(user);
-        this.sysUserName = user.account || '';
-        this.sysUserPower = user.power || '';
+      var emp = sessionStorage.getItem('emp');
+      if (emp) {
+        emp = JSON.parse(emp);
+        this.sysUserName = emp.account || '';
+        this.sysUserPower = emp.power || '';
       }
     }
   }
