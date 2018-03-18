@@ -8,7 +8,7 @@
             <span>{{item.name.length>16?item.name.substring(0,16)+'...':item.name}}</span>
             <div class="bottom clearfix">
               <el-button type="text" class="button" @click="showInfo(item.id)">查看详情</el-button>
-              <el-button type="danger" class="button">加入购物车</el-button>
+              <el-button type="danger" class="button" @click="addToCart(item.id)">加入购物车</el-button>
             </div>
           </div>
         </el-card>
@@ -42,6 +42,7 @@
                 sales: item.Book_Sales,
                 src: item.Book_Img,
                 price: item.Book_Price,
+                stock: item.Book_Stock
               })
             })
           }

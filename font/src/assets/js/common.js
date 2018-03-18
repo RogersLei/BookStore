@@ -151,7 +151,26 @@ const apiOpration = {
       this.$router.push(`/index/goods?id=${id}`)
     },
     addToCart(id,num=1) {
-    
+      let user = JSON.parse(sessionStorage.getItem('user'))
+      if(!user) {
+        // alert('')
+        this.$message.error('请在右上角先登陆')
+        return
+      } else {
+        if(num === 0){
+          this.$message.error('请输入数量')
+          return
+        }
+        let obj = {
+          account: user.account,
+          id: id,
+          num: num
+        }
+        console.log(obj)
+        this.apiPost('font/base/addGoodByID',obj).then((res)=>{
+          console.log(res)
+        })
+      }
     }
   },
   mixins: [http]

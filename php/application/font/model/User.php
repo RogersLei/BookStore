@@ -19,7 +19,7 @@
                     if(password_verify($checkPass, $old_pwd)){
                         try
                         {
-                            $res = ["code" => 200, "msg" => '验证成功', "name" => $user['User_Name']];
+                            $res = ["code" => 200, "msg" => '验证成功', "name" => $user['User_Name'], "img" => $user['User_Img']];
                         }  catch (Exception $e)
                         {
                             $res = ["code" => 0,"msg" => $e->getMessage()];
@@ -55,5 +55,46 @@
                 Db::rollback();// 回滚事务
             }
             return json($res);
+        }
+
+        public function updateUser($account, $name, $src, $pass)
+        {
+            if($pass === ''){
+                try
+                {
+                    Db::table('User')
+                        ->where('User_Account',$account)
+                        ->update([
+                            'User_Name'      =>  $name,
+                            'User_Img'       =>  $src,
+                        ]);
+                    Db::commit();       // 提交事务
+                    $res = ["code" => 200, "msg" => "OK"];
+                } catch (Exception $e)
+                {
+                    $res = ["code" => 0,"msg" => $e->getMessage()];
+                    Db::rollback();// 回滚事务
+                }
+                return json($res);
+            } else {
+                try
+                {
+                    Db::table('User')
+                        ->where('User_Account',$account)
+                        ->update([
+                            'User_Name'      =>  $name,
+                            'User_Img'       =>  $src,
+                            'User_Pwd'       =>  $pass
+                        ]);
+                    Db::commit();       // 提交事务
+                    $res = ["code" => 200, "msg" => "OK"];
+                } catch (Exception $e)
+                {
+                    $res = ["code" => 0,"msg" => $e->getMessage()];
+                    Db::rollback();// 回滚事务
+                }
+                return json($res);
+            }
+
         }
     }

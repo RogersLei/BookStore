@@ -30,6 +30,40 @@ class Base extends Common
             $data = $user->register($name, $account, $pass);
             return $data;
         }
-
     }
+
+    public function updateUser()
+    {
+        $user = model('User');
+        $account = input('account');
+        $name = input('name');
+        $src = input('src');
+        $pass = input('pass');
+        if($pass !== ""){
+            $pass = password_hash($pass, PASSWORD_DEFAULT);
+        }
+        $data = $user->updateUser($account, $name, $src, $pass);
+        return $data;
+    }
+
+    public function addGoodByID()
+    {
+        $goods = model('Goods');
+        $account = input('account');
+        $goodID = input('id');
+        $num = input('num');
+        $book = input('book');
+        $data = $goods->addGoodByID($account, $goodID, $num, $book);
+        return $data;
+    }
+
+    public function insertAddress()
+    {
+        $add = model('Address');
+        $account = input('account');
+        $address = input('address');
+        $data = $add->insertAdd($account,$address);
+        return $data;
+    }
+
 }

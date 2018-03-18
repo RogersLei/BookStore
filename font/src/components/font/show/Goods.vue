@@ -20,9 +20,31 @@
       </div>
       <div class="clearfix" style="padding: 20px 0;">
         <el-button type="danger" class="button" @click="addToCart(DataSource.id, num)">加入购物车</el-button>
-        <el-button type="danger" class="button" @click="Buy(DataSource.id)">立即购买</el-button>
+        <el-button type="danger" class="button" @click="Buy()">立即购买</el-button>
       </div>
     </el-col>
+    <el-dialog  title="填写订单" :visible.syc="dialogVisible" @close="handleCloseDialog">
+      <el-form :model="dialog" label-width="120px">
+        <el-form-item label="商品名称" prop="name">
+          <span style="font-size: 18px">{{dialog.name}}</span>
+        </el-form-item>
+        <el-form-item label="商品价格" prop="price">
+          <el-col :span="12">
+            <span style="color: red; font-size: 22px;">{{dialog.price}}</span>
+          </el-col>
+          <el-col :span="12">
+            <el-input-number size="mini" v-model="num" :min=0 :max='dialog.stock' @change="ChangeNum"></el-input-number>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="总金额" prop="allPrice">
+          <span style="color: red; font-size: 28px;">¥ {{dialog.num*dialog.price}}</span>
+        </el-form-item>
+        <el-form-item style="width: 100%">
+          <el-button type="" @click="handleCloseDialog">再去看看</el-button>
+          <el-button type="primary" @click="submitOrder">提交订单</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </el-container>
 </template>
 
@@ -37,6 +59,8 @@
       return {
         DataSource: {},
         num: 0,
+        dialogVisible: false,
+        dialog: {}
       }
     },
     methods: {
@@ -63,8 +87,17 @@
       handleChange(value) {
         this.num = value
       },
-      Buy(id) {
-
+      ChangeNum(value) {
+        this.dialog.num = value
+      },
+      Buy() {
+        let user = JSON.parse(sessionStorage.getItem('user'))
+        this.dialog = Object.assign({},user,this.DataSource)
+        this.dialog.num = this.num
+        this.dialogVisible = true
+      },
+      submitOrder() {
+        console.log(this.dialog)
       }
     },
     mounted(){

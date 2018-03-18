@@ -1,7 +1,8 @@
 <template>
   <el-container class="main">
-    <el-col :span="6" style="border-right: 1px solid #dddfe6">
-      <img src="http://ouibvkb9c.bkt.clouddn.com/avatar/1521100092178.png" alt="" style="height: 130px;width: 130px;">
+    <el-col :span="6" >
+      <img :src="user.src" alt="" style="height: 130px;width: 130px;">
+      <p>{{user.name}}</p>
       <el-menu
         :default-active="active"
         class="el-menu-vertical-demo"
@@ -27,13 +28,13 @@
         </el-menu-item>
       </el-menu>
     </el-col>
-    <el-col :span="18">
+    <el-col :span="18" >
       <el-col :span="24">
         <strong class="title" style="float: left; padding-left: 100px; color: #c1c1c1">{{$route.name}}</strong>
       </el-col>
-      <el-col :span="24">
+      <el-col :span="24" style="border: 1px solid #c1c1c1">
         <transition name="fade" mode="out-in">
-          <router-view name="UserAll"></router-view>
+          <router-view name="UserAll" @change="changeUser"></router-view>
         </transition>
       </el-col>
 
@@ -54,13 +55,18 @@
         //   'order': '/index/user/order'
         // }[this.$route.params.id]
         // 传:id是点击购物车／个人中心时 params.id不变且 router-view不能渲染
-        active: this.$route.path
+        active: this.$route.path,
+        user: {},
       }
     },
     methods: {
+      changeUser (value) {
+        this.user = value
+        this.$emit('change',value)
+      }
     },
     mounted() {
-      // console.log(this.$route.path)
+      this.user = JSON.parse(sessionStorage.getItem('user'))
     },
     mixins: []
   }
