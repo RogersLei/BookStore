@@ -12,9 +12,16 @@
             {
                 $user = Db::table('User')
                             ->where('User_Account',$account)->find();
+                $book_price = Db::table('Book')
+                                  ->where('Book_ID',$goodID)->value('Book_Price');
+                $book_name = Db::table('Book')
+                                  ->where('Book_ID',$goodID)->value('Book_Name');
                 $newData  = array([
-                    'id'    => $goodID,
-                    'num'   => $num
+                    'id'      => $goodID,
+                    'name'    => $book_name,
+                    'num'     => $num,
+                    'pprice'  => $book_price,
+                    'tprice'  => $book_price*$num
                 ]);
                 $oldData = json_decode($user['User_Cart'],true);
                 if(is_array($oldData))
@@ -24,7 +31,7 @@
                       if($row["id"]=== $newData[0]["id"])
                       {
                         $newData[0]["num"] = (string)($row["num"]+$newData[0]["num"]);
-;
+                        $newData[0]["tprice"] = (string)($newData[0]["num"]*$newData[0]["pprice"]);
                       } else
                       {
                         array_push($newData, $row);
@@ -52,13 +59,14 @@
         {
             try
             {
-                $res = Db::table('User')
+                $user = Db::table('User')
                             ->where('User_Account',$account)->find();
+                $res = json_decode($user['User_Cart'],true);
             } catch (Exception $e)
             {
                 $res = ["code" => 0,"msg" => $e->getMessage()];
                 Db::rollback();// 回滚事务
             }
-            return json($res);
+            return $res;
         }
     }

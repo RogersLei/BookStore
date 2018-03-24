@@ -16,7 +16,6 @@
     <el-row class="row">
       <el-col :span="24"><el-button type="danger" @click="submit">更改信息</el-button></el-col>
     </el-row>
-
   </div>
 </template>
 

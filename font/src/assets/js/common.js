@@ -167,7 +167,7 @@ const apiOpration = {
           num: num
         }
         console.log(obj)
-        this.apiPost('font/base/addGoodByID',obj).then((res)=>{
+        this.apiPost('font/base/addToCartByID',obj).then((res)=>{
           console.log(res)
         })
       }

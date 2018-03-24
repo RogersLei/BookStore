@@ -2,10 +2,10 @@
   <el-container v-loading.fullscreen.lock="loading">
     <el-main>
       <!--轮播图-->
-      <el-carousel trigger="click" height="250px" type="card">
+      <el-carousel trigger="click" height="" type="card">
         <el-carousel-item v-for="item in banners" :key="item.imgUrl">
           <!--{{item}}-->
-          <img src="../../../assets/banner/banner1.jpg" alt="">
+          <img :src="item.src" alt="">
           <!--<img :src="item.imgUrl" alt="">-->
         </el-carousel-item>
       </el-carousel>
@@ -18,7 +18,7 @@
             <span>{{item.name.length>16?item.name.substring(0,16)+'...':item.name}}</span>
             <div class="bottom clearfix">
               <el-button type="primary" class="button" @click="showInfo(item.id)">查看详情</el-button>
-              <!--<el-button type="danger" class="button" @click="addToCart(item.id)">加入购物车</el-button>-->
+              <el-button type="danger" class="button" @click="addToCart(item.id)">加入购物车</el-button>
             </div>
           </div>
         </el-card>
@@ -30,7 +30,7 @@
             <span>{{item.name.length>16?item.name.substring(0,16)+'...':item.name}}</span>
             <div class="bottom clearfix">
               <el-button type="primary" class="button" @click="showInfo(item.id)">查看详情</el-button>
-              <!--<el-button type="danger" class="button" @click="addToCart(item.id)">加入购物车</el-button>-->
+              <el-button type="danger" class="button" @click="addToCart(item.id)">加入购物车</el-button>
             </div>
           </div>
         </el-card>
@@ -42,7 +42,7 @@
             <span>{{item.name.length>16?item.name.substring(0,16)+'...':item.name}}</span>
             <div class="bottom clearfix">
               <el-button type="primary" class="button" @click="showInfo(item.id)">查看详情</el-button>
-              <!--<el-button type="danger" class="button" @click="addToCart(item.id)">加入购物车</el-button>-->
+              <el-button type="danger" class="button" @click="addToCart(item.id)">加入购物车</el-button>
             </div>
           </div>
         </el-card>
@@ -61,12 +61,7 @@
       return {
         loading: false,
         DataSource: [],
-        banners: [
-          {imgUrl: '../../assets/banner/banner1.jpg'},
-          {imgUrl: '../../assets/banner/banner2.jpg'},
-          {imgUrl: '../../assets/banner/banner3.jpg'},
-          {imgUrl: '../../assets/banner/banner4.jpg'}
-        ],
+        banners: [],
       }
     },
     methods: {
@@ -93,7 +88,14 @@
         })
       },
       loadBanner() {
-
+        this.apiPost('font/base/getBanner').then((res)=>{
+          res.forEach((item)=>{
+            this.banners.push({
+              id: item.Banner_ID,
+              src: item.Banner_Src
+            })
+          })
+        })
       },
     },
     mounted() {

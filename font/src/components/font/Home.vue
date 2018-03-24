@@ -23,7 +23,7 @@
       <el-col :span="6">
         <router-link to="/index/all"><el-button type="" style="margin-right: 0">全部商品</el-button></router-link>
 
-        <router-link to="/index/user/cart"><el-button type="danger" icon="el-icon-goods" style="margin-left: 0">购物车 <span style="margin-left: 3px" v-if="isLogin">{{GoodsNum}}</span></el-button></router-link>
+        <router-link to="/index/user/cart"><el-button type="danger" icon="el-icon-goods" style="margin-left: 0">购物车 <span style="margin-left: 3px" v-if="isLogin"></span></el-button></router-link>
 
         <router-link to="/index/user/info"><el-button type="" style="margin-left: 0" >个人中心</el-button></router-link>
       </el-col>
@@ -97,7 +97,6 @@
         return {
           books: [],
           searchBook: '',
-          GoodsNum: 3,
           activeName: 'second',
           isLogin: false,
           dialogVisibleLog: false,

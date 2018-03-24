@@ -32,9 +32,9 @@
       <el-col :span="24">
         <strong class="title" style="float: left; padding-left: 100px; color: #c1c1c1">{{$route.name}}</strong>
       </el-col>
-      <el-col :span="24" style="border: 1px solid #c1c1c1">
+      <el-col :span="24" style="border: 1px solid #c1c1c1; margin-right: 20px;">
         <transition name="fade" mode="out-in">
-          <router-view name="UserAll" @change="changeUser"></router-view>
+          <router-view name="UserAll" @change="changeUser" :message="msg"></router-view>
         </transition>
       </el-col>
 
@@ -44,31 +44,48 @@
 </template>
 
 <script>
+  import http from '../../../assets/js/http'
   export default {
     name: "user",
     data(){
       return {
-        // active: {
-        //   'info': '/index/user/info',
-        //   'cart': '/index/user/cart',
-        //   'address': '/index/user/address',
-        //   'order': '/index/user/order'
-        // }[this.$route.params.id]
-        // 传:id是点击购物车／个人中心时 params.id不变且 router-view不能渲染
         active: this.$route.path,
         user: {},
+        msg: []
       }
     },
     methods: {
       changeUser (value) {
         this.user = value
-        this.$emit('change',value)
+        this.$emit('change', value)
+      },
+      changeRoute () {
+        this.active = this.$route.path
+        if(this.$route.path === '/index/user/cart'){
+          this.getCarts()
+        }
+      },
+      getCarts () {
+        let obj ={
+          account: this.user.account
+        }
+        this.apiPost('font/base/findCarts', obj).then((res)=>{
+          res.forEach((item)=>{
+            this.msg.push(item)
+          })
+        })
       }
+    },
+    watch: {
+      "$route": "changeRoute",
     },
     mounted() {
       this.user = JSON.parse(sessionStorage.getItem('user'))
+      if(this.$route.path === '/index/user/cart'){
+        this.getCarts()
+      }
     },
-    mixins: []
+    mixins: [http]
   }
 </script>
 

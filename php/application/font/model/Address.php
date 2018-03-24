@@ -10,5 +10,7 @@
         {
             var_dump($account);
             var_dump($address);
+            print_r($account);
+            print_r($address);
         }
     }

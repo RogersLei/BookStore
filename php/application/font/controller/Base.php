@@ -46,15 +46,22 @@ class Base extends Common
         return $data;
     }
 
-    public function addGoodByID()
+    public function addToCartByID()
     {
-        $goods = model('Goods');
+        $cart = model('Cart');
         $account = input('account');
         $goodID = input('id');
         $num = input('num');
-        $book = input('book');
-        $data = $goods->addGoodByID($account, $goodID, $num, $book);
+        $data = $cart->addToCartByID($account, $goodID, $num);
         return $data;
+    }
+
+    public function findCarts()
+    {
+        $cart = model('Cart');
+        $account = input('account');
+        $data = $cart->findCarts($account);
+        return json_encode($data);
     }
 
     public function insertAddress()
@@ -65,5 +72,13 @@ class Base extends Common
         $data = $add->insertAdd($account,$address);
         return $data;
     }
+
+    public function getBanner()
+    {
+      $banner = model('Banner');
+      $data = $banner->getBanner();
+      return json_encode($data);
+    }
+
 
 }
