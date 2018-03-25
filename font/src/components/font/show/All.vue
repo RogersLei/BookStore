@@ -8,7 +8,8 @@
             <span>{{item.name.length>16?item.name.substring(0,16)+'...':item.name}}</span>
             <div class="bottom clearfix">
               <el-button type="text" class="button" @click="showInfo(item.id)">查看详情</el-button>
-              <el-button type="danger" class="button" @click="addToCart(item.id)">加入购物车</el-button>
+              <el-button type="text" class="button" @click="addToCart(item.id)" v-if="item.stock !==0">加入购物车</el-button>
+              <el-button type="text" v-else disabled>已售完</el-button>
             </div>
           </div>
         </el-card>

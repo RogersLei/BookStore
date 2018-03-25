@@ -68,10 +68,32 @@ class Base extends Common
     {
         $add = model('Address');
         $account = input('account');
+        $name = input('name');
+        $tel = input('tel');
         $address = input('address');
-        $data = $add->insertAdd($account,$address);
+        $data = $add->insertAdd($account,$name,$tel,$address);
         return $data;
     }
+
+    public function findAddress()
+    {
+        $add = model('Address');
+        $account = input('account');
+        $data = $add->findAddress($account);
+        return json_encode($data);
+    }
+
+    public function deleteAddress()
+    {
+        $add = model('Address');
+        $account = input('account');
+        $name = input('name');
+        $tel = input('tel');
+        $address = input('address');
+        $data = $add->delAdd($account,$name,$tel,$address);
+        return $data;
+    }
+
 
     public function getBanner()
     {

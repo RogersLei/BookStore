@@ -166,9 +166,12 @@ const apiOpration = {
           id: id,
           num: num
         }
-        console.log(obj)
         this.apiPost('font/base/addToCartByID',obj).then((res)=>{
-          console.log(res)
+          if(res.code === 200 ){
+            this.$message.success('添加成功')
+          } else {
+            this.$message.error('添加失败')
+          }
         })
       }
     }

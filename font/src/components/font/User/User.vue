@@ -34,7 +34,7 @@
       </el-col>
       <el-col :span="24" style="border: 1px solid #c1c1c1; margin-right: 20px;">
         <transition name="fade" mode="out-in">
-          <router-view name="UserAll" @change="changeUser" :message="msg"></router-view>
+          <router-view name="UserAll" @change="changeUser" :carts="carts" :address="address"></router-view>
         </transition>
       </el-col>
 
@@ -51,7 +51,8 @@
       return {
         active: this.$route.path,
         user: {},
-        msg: []
+        carts: [],
+        address: []
       }
     },
     methods: {
@@ -70,9 +71,31 @@
           account: this.user.account
         }
         this.apiPost('font/base/findCarts', obj).then((res)=>{
-          res.forEach((item)=>{
-            this.msg.push(item)
-          })
+          if(res !== null) {
+            if (res.code !== 0) {
+              res.forEach((item) => {
+                this.carts.push(item)
+              })
+            } else {
+              this.$message.error('数据出错，请联系后台人员查看数据库')
+            }
+          }
+        })
+      },
+      getAddress () {
+        let obj ={
+          account: this.user.account
+        }
+        this.apiPost('font/base/findAddress', obj).then((res)=>{
+          if(res !== null){
+            if(res.code !==0) {
+              res.forEach((item) => {
+                this.address.push(item)
+              })
+            }
+          } else {
+            this.$message.error('数据出错，请联系后台人员查看数据库')
+          }
         })
       }
     },
@@ -83,6 +106,8 @@
       this.user = JSON.parse(sessionStorage.getItem('user'))
       if(this.$route.path === '/index/user/cart'){
         this.getCarts()
+      } else if(this.$route.path === '/index/user/address'){
+        this.getAddress()
       }
     },
     mixins: [http]
