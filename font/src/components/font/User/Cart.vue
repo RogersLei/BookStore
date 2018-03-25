@@ -2,7 +2,7 @@
   <div style="height: 562px;">
     <el-table
       ref="cartTable"
-      :data="message"
+      :data="carts"
       max-height="522"
       tooltip-effect="dark"
       style="width: 100%"
@@ -45,7 +45,7 @@
       return {
       }
     },
-    props:['message'],
+    props:['carts'],
     methods: {
     }
 
