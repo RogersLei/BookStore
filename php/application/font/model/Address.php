@@ -25,9 +25,7 @@
                     array_push($newData, $row);
                   }
                 }
-                var_dump($newData);
                 $newData = json_encode($newData);
-                var_dump($newData);
                 Db::table('User')
                     ->where('User_Account',$account)
                     ->update([
