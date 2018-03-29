@@ -117,4 +117,12 @@ class Base extends Common
       }
     }
 
+    public function findOrder()
+    {
+        $order = model('Order');
+        $account = input('account');
+        $data = $order->findOrder($account);
+        return json_encode($data);
+    }
+
 }
