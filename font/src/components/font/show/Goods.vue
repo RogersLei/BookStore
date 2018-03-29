@@ -39,6 +39,16 @@
         <el-form-item label="总金额" prop="allPrice">
           <span style="color: red; font-size: 28px;">¥ {{dialog.num*dialog.price}}</span>
         </el-form-item>
+        <el-form-item label="配送信息" prop="name">
+          <el-select v-model="curAddress" placeholder="请选择" style="width: 400px" @change="click">
+            <el-option
+              v-for="(item,index) in address"
+              :key="index"
+              :label="(item.name+item.tel+item.address)"
+              :value="(item.name+item.tel+item.address)">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item style="width: 100%">
           <el-button type="" @click="handleCloseDialog">再去看看</el-button>
           <el-button type="primary" @click="submitOrder">提交订单</el-button>
@@ -60,7 +70,9 @@
         DataSource: {},
         num: 0,
         dialogVisible: false,
-        dialog: {}
+        dialog: {},
+        address: [],
+        curAddress: ''
       }
     },
     methods: {
@@ -91,13 +103,67 @@
         this.dialog.num = value
       },
       Buy() {
+        if(this.num === 0){
+          this.$message.error('请先确认数量')
+          return
+        }
         let user = JSON.parse(sessionStorage.getItem('user'))
+        if(!user){
+          this.$message.error('请在右上角先登陆')
+          return
+        }
+        this.apiPost('font/base/findAddress',{account: user.account}).then((res)=>{
+          if(res !== null){
+            if(res.code !==0) {
+              res.forEach((item) => {
+                this.address.push(item)
+              })
+            }
+          } else {
+            this.$message.error('数据出错，请联系后台人员查看数据库')
+          }
+        })
         this.dialog = Object.assign({},user,this.DataSource)
         this.dialog.num = this.num
         this.dialogVisible = true
       },
+      click (value) {
+        this.curAddress = value
+      },
       submitOrder() {
-        console.log(this.dialog)
+        if( this.curAddress ===''){
+          this.$message.error('请选择配送地址')
+          return
+        }
+        let obj = {
+          account: this.dialog.account,
+          address: this.curAddress,
+          order: [{
+            id: this.dialog.id,
+            num: this.dialog.num,
+            price: this.dialog.price*this.dialog.num
+          }],
+          tprice: this.dialog.price*this.dialog.num
+        }
+        let Now = new Date()
+        let Y = Now.getFullYear()
+        let M = '0' + (Now.getMonth()+1)
+        let D = '0' + (Now.getDate())
+        let h = '0' + (Now.getHours())
+        let m = '0' + (Now.getMinutes())
+        let s = '0' + (Now.getSeconds())
+        let date = Y +'-' + M.substring(M.length-2, M.length) + '-'+D.substring(D.length-2, D.length) + ' '
+          + h.substring(h.length-2, h.length) + ':' + m.substring(m.length-2, m.length) + ':'
+          + s.substring(s.length-2, s.length)
+        obj.time = date
+        this.apiPost('font/base/createOrder',obj).then((res)=>{
+          console.log(res)
+          if(res.code === 200) {
+            this.$message.success('提交订单成功')
+          } else {
+            this.$message.error('购买失败')
+          }
+        })
       }
     },
     mounted(){

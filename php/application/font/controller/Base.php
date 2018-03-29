@@ -102,5 +102,19 @@ class Base extends Common
       return json_encode($data);
     }
 
+    public function createOrder()
+    {
+      $order = model('Order');
+      $account = input('account');
+      $orderList = input('order/a');
+      $address = input('address');
+      $time = input('time');
+      $tprice = input('tprice');
+      if($account != NULL)
+      {
+        $data = $order->createOrder($account,$orderList,$address,$tprice,$time);
+        return $data;
+      }
+    }
 
 }
