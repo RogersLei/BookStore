@@ -23,6 +23,13 @@
       >
       </el-table-column>
       <el-table-column
+        prop="Order_Address"
+        label="订单地址"
+        align="center"
+        show-overflow-tooltip
+      >
+      </el-table-column>
+      <el-table-column
         prop="Order_Price"
         label="订单总价"
         align="center"
