@@ -69,4 +69,21 @@
             }
             return $res;
         }
+
+        public function deleteCart($account)
+        {
+            try
+            {
+                Db::table('User')
+                    ->where('User_Account',$account)
+                    ->update(['User_Cart' => '']);
+                Db::commit();       // 提交事务
+                $res = ["code" => 200, "msg" => "OK"];
+            } catch (Exception $e)
+            {
+                $res = ["code" => 0,"msg" => $e->getMessage()];
+                Db::rollback();// 回滚事务
+            }
+            return json($res);
+        }
     }

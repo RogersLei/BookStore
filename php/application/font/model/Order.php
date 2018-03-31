@@ -6,7 +6,7 @@
     use think\Db;
     class Order extends Model
     {
-      public function createOrder($account,$order,$address,$tprice,$time)
+      public function createOrder($account,$order,$tprice,$address,$time)
       {
         try
         {
@@ -19,7 +19,8 @@
             'Order_Books'     =>  $order,
             'Order_Price'     =>  $tprice,
             'Order_Status'    =>  '待付款',
-            'Order_StartTime' =>  $time
+            'Order_StartTime' =>  $time,
+            'Order_Address'   =>  $address
           ];
           Db::table('Order_List')->insert($data);
           Db::commit();       // 提交事务

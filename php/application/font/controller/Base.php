@@ -64,6 +64,14 @@ class Base extends Common
         return json_encode($data);
     }
 
+    public function deleteCart()
+    {
+        $cart = model('Cart');
+        $account = input('account');
+        $data = $cart->deleteCart($account);
+        return $data;
+    }
+
     public function insertAddress()
     {
         $add = model('Address');
@@ -112,7 +120,7 @@ class Base extends Common
       $tprice = input('tprice');
       if($account != NULL)
       {
-        $data = $order->createOrder($account,$orderList,$address,$tprice,$time);
+        $data = $order->createOrder($account,$orderList,$tprice,$address, $time);
         return $data;
       }
     }

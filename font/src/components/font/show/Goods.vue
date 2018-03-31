@@ -160,6 +160,7 @@
           console.log(res)
           if(res.code === 200) {
             this.$message.success('提交订单成功')
+            this.$router.go('/index/user/order')
           } else {
             this.$message.error('购买失败')
           }

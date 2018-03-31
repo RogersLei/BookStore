@@ -107,6 +107,7 @@
           if(res !== null){
             if(res.code !==0) {
               res.map((item)=>{
+                item.Order_Price = 0
                 item.Order_Books = JSON.parse(item.Order_Books)
                 item.Order_Book = ''
                 item.Order_Books.forEach((item_book)=>{
@@ -115,6 +116,7 @@
                     item_book.name = res[0].Book_Name
                   }).then(()=>{
                     item.Order_Book += `书名:${item_book.name} 数量:${item_book.num} 价格:${item_book.price} `
+                    item.Order_Price += item_book.price
                   })
                 })
                 return item

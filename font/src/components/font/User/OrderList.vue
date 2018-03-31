@@ -23,10 +23,16 @@
       >
       </el-table-column>
       <el-table-column
+        prop="Order_Price"
+        label="订单总价"
+        align="center"
+        width="120">
+      </el-table-column>
+      <el-table-column
         prop="Order_Status"
         label="订单状态"
         align="center"
-        width="180">
+        width="120">
       </el-table-column>
       <el-table-column
         prop=""
