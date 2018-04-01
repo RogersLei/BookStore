@@ -89,6 +89,10 @@
         this.curAddress = value
       },
       submitOrder () {
+        if( this.curAddress ===''){
+          this.$message.error('请选择配送地址')
+          return
+        }
         let tprice = 0
         let obj = {
           account: this.account,
@@ -116,7 +120,6 @@
           + h.substring(h.length-2, h.length) + ':' + m.substring(m.length-2, m.length) + ':'
           + s.substring(s.length-2, s.length)
         obj.time = date
-        console.log(obj)
         this.apiPost('font/base/createOrder',obj).then((res)=>{
           if(res.code === 200) {
             this.$message.success('提交订单成功')
