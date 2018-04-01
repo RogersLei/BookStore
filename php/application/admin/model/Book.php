@@ -38,12 +38,13 @@
         {
             try
             {
+                $Book_TypeID = Db::query('SELECT BookType_ID FROM Book_Type where BookType_Name=:name',['name' => $type]);
                 Db::table('Book')
                     ->where('Book_ID',$id)
                     ->update([
                         'Book_Name'     =>  $name,
                         'Book_Price'    =>  $price,
-                        'Book_Type'     =>  $type,
+                        'Book_TypeID'   =>  $Book_TypeID,
                         'Book_Stock'    =>  $num
                     ]);
                 Db::commit();       // 提交事务

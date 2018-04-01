@@ -59,7 +59,7 @@ const apiOpration = {
       })
     },
     handleMakeEdit(locate) {
-      let obj = this.dialog
+      let obj = Object.assign({},this.dialog)
       this.apiPost('admin/base/update'+locate,obj).then((res)=>{
         if(res.code == 200){
           this.$message({

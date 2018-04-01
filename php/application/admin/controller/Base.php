@@ -52,8 +52,11 @@ class Base extends Common
         $name = input('name');
         $tel = input('tel');
         $type = input('tag');
-        $data = $emp->updateEmp($id, $name, $tel, $type);
-        return $data;
+        if($id != NULL && $name != NULL & $tel != NULL && $type != NULL)
+        {
+          $data = $emp->updateEmp($id, $name, $tel, $type);
+          return $data;
+        }
     }
 
     public function deleteEmp()
@@ -96,8 +99,12 @@ class Base extends Common
         $num = input('num');
         $price = input('price');
         $type = input('tag');
-        $data = $book->updateBook($id,$name,$num,$price,$type);
-        return $data;
+        if($id != NULL && $name != NULL && $num != NULL && $price != NULL && $type != NULL)
+        {
+          $data = $book->updateBook($id,$name,$num,$price,$type);
+          return $data;
+        }
+
     }
 
 
