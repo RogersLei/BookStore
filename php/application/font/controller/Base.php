@@ -133,4 +133,19 @@ class Base extends Common
         return json_encode($data);
     }
 
+    public function seachOrderByID()
+    {
+        $order = model('Order');
+        $id = input('id');
+        $data = $order->seachOrderByID($id);
+        return json_encode($data);
+    }
+
+    public function deleteOrderByID()
+    {
+        $order = model('Order');
+        $id = input('id');
+        $data = $order->deleteOrderByID($id);
+        return json_encode($data);
+    }
 }
