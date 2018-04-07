@@ -104,7 +104,7 @@
                   price: item.Book_Price,
                   sales: item.Book_Sales,
                 }
-                tags[index] = item.Book_Type
+                tags[index] = item.BookType_Name
                 tags = Array.from(new Set(tags))
               })
               tags.forEach((item, index) => {
