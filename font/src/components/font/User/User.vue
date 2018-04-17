@@ -1,6 +1,6 @@
 <template>
   <el-container class="main">
-    <el-col :span="6" >
+    <el-col :span="6">
       <img :src="user.src" alt="" style="height: 130px;width: 130px;">
       <p>{{user.name}}</p>
       <el-menu
@@ -28,13 +28,14 @@
         </el-menu-item>
       </el-menu>
     </el-col>
-    <el-col :span="18" >
+    <el-col :span="18">
       <el-col :span="24">
         <strong class="title" style="float: left; padding-left: 100px; color: #c1c1c1">{{$route.name}}</strong>
       </el-col>
       <el-col :span="24" style="border: 1px solid #c1c1c1; margin-right: 20px;">
         <transition name="fade" mode="out-in">
-          <router-view name="UserAll" @change="changeUser" :carts="carts" :address="address" :orders="orders"></router-view>
+          <router-view name="UserAll" @change="changeUser" :carts="carts" :address="address" :orders="orders"
+                       :key="$route.fullPath"></router-view>
         </transition>
       </el-col>
 
@@ -45,9 +46,10 @@
 
 <script>
   import http from '../../../assets/js/http'
+
   export default {
     name: "user",
-    data(){
+    data() {
       return {
         active: this.$route.path,
         user: {},
@@ -57,72 +59,71 @@
       }
     },
     methods: {
-      changeUser (value) {
+      changeUser(value) {
         this.user = value
         this.$emit('change', value)
       },
-      changeRoute () {
+      changeRoute() {
         this.active = this.$route.path
-        if(this.$route.path === '/index/user/cart'){
+        if (this.$route.path === '/index/user/cart') {
           this.getCarts()
+        } else if (this.$route.path === '/index/user/address') {
+          this.getAddress()
+        } else if (this.$route.path === '/index/user/order') {
+          this.getOrder()
         }
       },
-      getCarts () {
-        let obj ={
+      getCarts() {
+        let obj = {
           account: this.user.account
         }
-        this.apiPost('font/base/findCarts', obj).then((res)=>{
-          if(res !== null) {
+        this.apiPost('font/base/findCarts', obj).then((res) => {
+          if (res !== null) {
             if (res.code !== 0) {
-              res.forEach((item) => {
-                this.carts.push(item)
-              })
+                this.carts = res
             } else {
               this.$message.error('数据出错，请联系后台人员查看数据库')
             }
           }
         })
       },
-      getAddress () {
-        let obj ={
+      getAddress() {
+        let obj = {
           account: this.user.account
         }
-        this.apiPost('font/base/findAddress', obj).then((res)=>{
-          if(res !== null){
-            if(res.code !==0) {
-              res.forEach((item) => {
-                this.address.push(item)
-              })
+        this.apiPost('font/base/findAddress', obj).then((res) => {
+          if (res !== null) {
+            if (res.code !== 0) {
+                this.address = res
             }
           } else {
             this.$message.error('数据出错，请联系后台人员查看数据库')
           }
         })
       },
-      getOrder () {
-        let obj ={
+      getOrder() {
+        let obj = {
           account: this.user.account
         }
-        this.apiPost('font/base/findOrder', obj).then((res)=>{
-          if(res !== null){
-            if(res.code !==0) {
-              res.map((item)=>{
+        this.apiPost('font/base/findOrder', obj).then((res) => {
+          if (res !== null) {
+            if (res.code !== 0) {
+              res.map((item) => {
                 item.Order_Price = 0
                 item.Order_Books = JSON.parse(item.Order_Books)
                 item.Order_Book = ''
-                item.Order_Books.forEach((item_book)=>{
+                item.Order_Books.forEach((item_book) => {
                   let ID = {id: item_book.id}
-                  this.apiPost('admin/base/findBookByID',ID).then((res)=>{
+                  this.apiPost('admin/base/findBookByID', ID).then((res) => {
                     item_book.name = res[0].Book_Name
-                  }).then(()=>{
+                  }).then(() => {
                     item.Order_Book += `书名:${item_book.name} 数量:${item_book.num} 价格:${item_book.price} `
                     item.Order_Price += item_book.price
                   })
                 })
                 return item
-              }).forEach((item) => {
-                this.orders.push(item)
               })
+              this.orders = res
             }
           } else {
             this.$message.error('数据出错，请联系后台人员查看数据库')
@@ -148,7 +149,7 @@
 </script>
 
 <style scoped lang="scss">
-  .main{
+  .main {
     min-height: 500px;
     margin-top: 50px;
   }
