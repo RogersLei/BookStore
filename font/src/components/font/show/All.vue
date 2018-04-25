@@ -2,7 +2,7 @@
   <el-container>
     <el-main>
       <el-col :span="6" v-for="(item, index) in DataSource" :key="item.id">
-        <el-card :body-style="{ padding: '0px' }">
+        <el-card :body-style="{ padding: '0px' }" class="card-item">
           <img class="image" v-lazy="item.src">
           <div style="padding: 0px;">
             <span>{{item.name.length>16?item.name.substring(0,16)+'...':item.name}}</span>
@@ -58,5 +58,8 @@
 </script>
 
 <style scoped>
-
+  .card-item:hover{
+    transform: translateY(-3px);
+    box-shadow: 1px 1px 20px #999;
+  }
 </style>
