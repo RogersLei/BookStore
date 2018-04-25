@@ -10,6 +10,7 @@ import EmpList from '@/components/admin/User/UserList.vue'
 import EmpAdd from '@/components/admin/User/UserAdd.vue'
 import BookList from '@/components/admin/Book/BookList.vue'
 import BookSort from '@/components/admin/Book/BookSort.vue'
+import Banner from '@/components/admin/SetFont/Banner.vue'
 import SalesRank from '@/components/admin/Sale/SalesRank.vue'
 import SalesCount from '@/components/admin/Sale/SalesCount.vue'
 import FontHome from '@/components/font/show/Home.vue'
@@ -54,7 +55,7 @@ let routes = [
     name: '前台',
     iconCls: '',
     children: [
-      { path: '/banner', component: Main, name: '轮播图' },
+      { path: '/banner', component: Banner, name: '轮播图' },
       { path: '/saleF', component: Main, name: '店长推荐' }
     ]
   },

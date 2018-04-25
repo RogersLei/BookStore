@@ -142,4 +142,44 @@ class Base extends Common
         return $data;
     }
 
+    public function findBanner()
+    {
+        $banner = model('Banner');
+        $data = $banner->findBanner();
+        return json_encode($data);
+    }
+
+    public function addBanner()
+    {
+        $banner = model('Banner');
+        $src = input('src');
+        if($src !== null && $src !== '')
+        {
+          $data = $banner->addBanner($src);
+          return $data;
+        }
+    }
+
+    public function updateBanner()
+    {
+        $banner = model('Banner');
+        $id = input('id');
+        $src = input('src');
+        $type = input('type');
+        if($src !== null && $src !== '' && $type !== null && $type !== '')
+        {
+          $data = $banner->updateBanner($id,$src,$type);
+          return $data;
+        }
+
+    }
+
+    public function deleteBanner()
+    {
+        $banner = model('Banner');
+        $id = input('id');
+        $data = $banner->deleteBanner($id);
+        return $data;
+    }
+
 }

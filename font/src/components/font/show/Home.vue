@@ -94,10 +94,12 @@
       loadBanner() {
         this.apiPost('font/base/getBanner').then((res)=>{
           res.forEach((item)=>{
-            this.banners.push({
-              id: item.Banner_ID,
-              src: item.Banner_Src
-            })
+            if( item.Banner_Type === 1){
+              this.banners.push({
+                id: item.Banner_ID,
+                src: item.Banner_Src
+              })
+            }
           })
         })
       },
