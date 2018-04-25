@@ -18,7 +18,7 @@
       </el-col>
     </el-col>
     <el-col :span="24" class="main">
-      <aside :class="menu-expanded">
+      <aside class="menu_expanded">
         <!--导航菜单-->
         <el-menu :default-active="$route.path" class="el-menu-vertical-demo" @open="handleopen" @close="handleclose" @select="handleselect"
                  unique-opened router v-show="!collapsed">
@@ -213,7 +213,7 @@
         flex:0 0 60px;
         width: 60px
       }
-      .menu-expanded{
+      .menu_expanded{
         flex:0 0 230px;
         width: 230px;
       }
