@@ -33,6 +33,18 @@ const apiOpration = {
         let obj = { //后来需要完善权限处理
           id: row.id
         }
+        if(locate === 'Emp'){
+          let user = JSON.parse(sessionStorage.getItem('emp'))
+          console.log(user.power, row.tag)
+          if(user.power === row.tag){
+            return
+          }
+          if (user.power === '管理员' && row.tag === '店长') {
+            return
+          } else if (user.power === '前台管理员' && (row.tag === '店长' || row.tag === '管理员')){
+            return
+          }
+        }
         this.apiPost('admin/base/delete'+locate,obj).then((res)=>{
           if(res.code == 200){
             this.$message({

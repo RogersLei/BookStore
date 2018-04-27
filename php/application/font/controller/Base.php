@@ -148,4 +148,12 @@ class Base extends Common
         $data = $order->deleteOrderByID($id);
         return json_encode($data);
     }
+
+    public function finishOrder()
+    {
+        $order = model('Order');
+        $id = input('id');
+        $data = $order->finishOrder($id);
+        return json_encode($data);
+    }
 }

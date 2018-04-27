@@ -43,7 +43,15 @@
             $user = Db::table('User')
                         ->where('User_Account',$account)->find();
             $userID = $user['User_ID'];
-            $res = Db::query('select * from Order_List where Order_User=:id',['id'=>$userID]);
+            $res = Db::query('select * from Order_List where Order_User=:id order by Order_StartTime desc',['id'=>$userID]);
+            foreach($res as $key => $val)
+            {
+              $time  = date("Y-m-d H:i:s",strtotime("-2 day"));
+              if($val['Order_Status'] === '待收货' && $val['Order_StartTime'] < $time)
+              {
+                $res[$key]['Order_play'] = 1;
+              }
+            }
         } catch (Exception $e)
         {
             $res = ["code" => 0,"msg" => $e->getMessage()];
@@ -127,5 +135,26 @@
           }
         }
         return json($res);
+     }
+
+     public function finishOrder($id)
+     {
+        try
+        {
+            $time  = date("Y-m-d H:i:s");
+            Db::table('Order_List')
+                    ->where('Order_ID',$id)
+                    ->update([
+                      'Order_Status' => '已完成',
+                      'Order_EndTime' =>  $time
+                    ]);
+            Db::commit();
+            $res = ["code" => 200, "msg" => "OK"];
+        } catch (Exception $e)
+        {
+            $res = ["code" => 0,"msg" => $e->getMessage()];
+            Db::rollback();// 回滚事务
+        }
+        return $res;
      }
    }

@@ -118,9 +118,9 @@
         this.apiPost('admin/base/updateBanner',obj).then(res => {
           if(res.code === 200) {
             this.$message.success('修改记录成功')
-            setTimeout(()=>{
-              this.$router.go(this.$route.fullPath)
-            },1000)
+            // setTimeout(()=>{
+            //   this.$router.go(this.$route.fullPath)
+            // },1000)
           } else {
             this.$message,error('修改失败')
           }

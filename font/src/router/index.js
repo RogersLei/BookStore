@@ -4,13 +4,13 @@ import Home from '@/components/admin/Home.vue'
 import Index from '@/components/font/Home.vue'
 import NotFound from '@/components/404.vue'
 
-import Main from '@/components/aaa.vue'
 
 import EmpList from '@/components/admin/User/UserList.vue'
 import EmpAdd from '@/components/admin/User/UserAdd.vue'
 import BookList from '@/components/admin/Book/BookList.vue'
 import BookSort from '@/components/admin/Book/BookSort.vue'
 import Banner from '@/components/admin/SetFont/Banner.vue'
+import OrderManage from '@/components/admin/SetFont/OrderManage.vue'
 import SalesRank from '@/components/admin/Sale/SalesRank.vue'
 import SalesCount from '@/components/admin/Sale/SalesCount.vue'
 import FontHome from '@/components/font/show/Home.vue'
@@ -56,7 +56,7 @@ let routes = [
     iconCls: '',
     children: [
       { path: '/banner', component: Banner, name: '轮播图' },
-      { path: '/saleF', component: Main, name: '店长推荐' }
+      { path: '/order', component: OrderManage, name: '订单管理' }
     ]
   },
   {

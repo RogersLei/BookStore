@@ -57,8 +57,11 @@
           <div v-else-if="scope.row.Order_Status === '待发货'">
             <el-button @click="handleCall(scope.$index, scope.row)">联系卖家</el-button>
           </div>
-          <div v-else-if="scope.row.Order_Status === '待收货'">
+          <div v-else-if="scope.row.Order_Status === '待收货' && scope.row.Order_play !== 1">
             <el-button type="success" @click="handleSearch(scope.$index, scope.row)">查看物流</el-button>
+          </div>
+          <div v-else-if="scope.row.Order_Status === '待收货' && scope.row.Order_play === 1">
+            <el-button type="success" @click="handleFinish(scope.$index, scope.row)">确认收货</el-button>
           </div>
           <div v-else-if="scope.row.Order_Status === '已完成'">
             <span>{{scope.row.Order_EndTime}}</span>
@@ -154,6 +157,18 @@
         this.apiPost('font/base/seachOrderByID', { id: row.Order_ID }).then((res)=>{
           if(res.code !== 0){
             this.$message.success(`您的快递单号为: ${res.Order_Number}`)
+          }
+        })
+      },
+      handleFinish (index, row) {
+        this.apiPost('font/base/finishOrder',{id: row.Order_ID}).then(res => {
+          if(res.code === 200){
+            this.$message.success('确认成功')
+            setTimeout(()=>{
+              this.$router.go(this.$route.fullPath)
+            },1000)
+          } else {
+            this.$message.error('确认收货失败')
           }
         })
       },

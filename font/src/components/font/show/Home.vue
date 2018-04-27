@@ -71,12 +71,16 @@
       loadBook() {
         this.loading = true
         this.apiPost('admin/sales/salesTop10').then((res) => {
+          if(Object.prototype.toString.call(res) === '[object Error]'){
+            this.$message.warning('请求服务器失败，请检查网络')
+            this.loading = false
+            return
+          }
           if(res === '' || res === null) {
             console.log('no data')
             this.loading = false
             this.$message.error('没有数据，请联系数据库管理员')
           } else {
-
             res.forEach((item, index) => {
               this.DataSource[index] = {
                 id: item.Book_ID,
@@ -93,6 +97,10 @@
       },
       loadBanner() {
         this.apiPost('font/base/getBanner').then((res)=>{
+          if(Object.prototype.toString.call(res) === '[object Error]'){
+            this.$message.warning('请求服务器失败，请检查网络')
+            return
+          }
           res.forEach((item)=>{
             if( item.Banner_Type === 1){
               this.banners.push({
