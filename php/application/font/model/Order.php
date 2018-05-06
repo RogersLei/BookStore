@@ -139,8 +139,23 @@
 
      public function finishOrder($id)
      {
+        $aaa = Db::table('Order_List')->where('Order_ID',$id)->find();
+        $arr = json_decode($aaa['Order_Books']);
         try
         {
+            foreach($arr as $key)
+            {
+              $book_id = $key->id;
+              $book_num = $key->num;
+              $book = Db::table('Book')
+                          ->where('Book_ID',$book_id)
+                          ->find();
+              $sales = $book['Book_Sales'];
+              $newSales = $sales + $book_num;
+              Db::table('Book')
+                    ->where('Book_ID',$book_id)
+                    ->update(['Book_Sales' => $newSales]);
+            }
             $time  = date("Y-m-d H:i:s");
             Db::table('Order_List')
                     ->where('Order_ID',$id)

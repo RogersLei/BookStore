@@ -33,7 +33,7 @@
       </el-table-column>
     </el-table>
     <div style="float: right">
-      <el-button type="danger" class="button" @click="buy">立即购买</el-button>
+      <el-button type="danger" class="button" @click="buy">去清空购物车</el-button>
     </div>
     <el-dialog  title="填写订单" :visible.syc="dialogVisible" @close="handleCloseDialog">
       <el-form label-width="120px">

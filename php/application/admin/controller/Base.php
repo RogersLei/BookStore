@@ -182,4 +182,15 @@ class Base extends Common
         return $data;
     }
 
+
+    public function recommend()
+    {
+        $book = model('Book');
+        $arr = input('books/a');
+        if($arr !== null)
+        {
+            $data = $book->recommend($arr);
+            return json_encode($data);
+        }
+    }
 }

@@ -14,13 +14,7 @@
       <el-col :span="6">
         <router-link to="/index"><img src="../../assets/1.jpg" alt="xxx" height="100" width="200"></router-link>
       </el-col>
-      <el-col :span="12">
-        <el-autocomplete class="inline-input" v-model="searchBook" :fetch-suggestions="queryBook"
-                         :trigger-on-focus="false" style="width: 500px"
-                         placeholder="请输入内容" suffix-icon="el-icon-search" @select="handleSelect">
-        </el-autocomplete>
-      </el-col>
-      <el-col :span="6">
+      <el-col :span="6" :offset="12">
         <router-link to="/index/all"><el-button type="" style="margin-right: 0">全部商品</el-button></router-link>
 
         <router-link to="/index/user/cart"><el-button type="danger" icon="el-icon-goods" style="margin-left: 0">购物车 <span style="margin-left: 3px" v-if="isLogin"></span></el-button></router-link>
@@ -185,6 +179,7 @@
               this.user = {
                 name: user.name,
               }
+              this.$router.go(this.$route.fullPath)
             } else {
               this.$message.error(res.msg)
             }

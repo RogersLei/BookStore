@@ -160,7 +160,22 @@ const apiOpration = {
     },
   
     showInfo(id) {
+      let user = JSON.parse(sessionStorage.getItem('user'))
+      if(user){
+        let history = JSON.parse(sessionStorage.getItem('history'))
+        if(history){
+          history.push(id)
+          history = Array.from(new Set(history))
+          sessionStorage.setItem('history',JSON.stringify(history))
+        } else {
+          let arr = []
+          arr.push(id)
+          arr = Array.from(new Set(arr))
+          sessionStorage.setItem('history',JSON.stringify(arr))
+        }
+      }
       this.$router.push(`/index/goods?id=${id}`)
+      this.$router.go(this.$route.fullPath)
     },
     addToCart(id,num=1) {
       let user = JSON.parse(sessionStorage.getItem('user'))

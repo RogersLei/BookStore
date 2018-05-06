@@ -153,7 +153,10 @@ class Base extends Common
     {
         $order = model('Order');
         $id = input('id');
-        $data = $order->finishOrder($id);
-        return json_encode($data);
+        if($id !== null)
+        {
+          $data = $order->finishOrder($id);
+          return json_encode($data);
+        }
     }
 }

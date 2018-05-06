@@ -1,28 +1,48 @@
 <template>
-  <el-container style="margin: 20px 20px 0;  border: 1px solid #dbdbdb;">
-    <el-col :span="10" style="margin-top: 80px">
-      <img v-lazy="DataSource.src" alt="图书图片" style="margin-left: 150px">
-    </el-col>
-    <el-col :span="14" style="text-align: left">
-      <h2>{{DataSource.name}}</h2>
-      <div style="padding: 20px 0;">
-        <span style="color: #bdbdc1;">{{DataSource.des}}</span>
-        <span style="margin-left: 100px; color: red; font-weight: bold">
+  <el-container>
+    <el-row style="margin: 20px 20px 0;  border: 1px solid #dbdbdb;">
+      <el-col :span="10" style="margin-top: 80px">
+        <img v-lazy="DataSource.src" alt="图书图片" style="margin-left: 150px">
+      </el-col>
+      <el-col :span="14" style="text-align: left">
+        <h2>{{DataSource.name}}</h2>
+        <div style="padding: 20px 0;">
+          <span style="color: #bdbdc1;">{{DataSource.des}}</span>
+          <span style="margin-left: 100px; color: red; font-weight: bold">
           <span>¥</span> <span style="font-size: 24px">{{DataSource.price}}</span>
         </span>
+        </div>
+        <div style="padding: 20px 0;">
+          <span style="color: #9f8f8d; font-size: 14px">数量：</span>
+          <el-input-number size="mini" v-model="num" :min=0 :max='DataSource.stock' @change="handleChange"></el-input-number>
+        </div>
+        <div style="padding: 20px 0;color: #9f8f8d;">
+          <span style="color: #9f8f8d; font-size: 14px">当前仅剩：</span> <span style="color: red; font-size: 24px">{{DataSource.stock}}</span> 本
+        </div>
+        <div class="clearfix" style="padding: 20px 0;">
+          <el-button type="danger" class="button" @click="addToCart(DataSource.id, num)">加入购物车</el-button>
+          <el-button type="danger" class="button" @click="Buy()">立即购买</el-button>
+        </div>
+      </el-col>
+    </el-row>
+    <el-footer v-if="user">
+      <div class="lines" v-if="recommendArr.length>0">
+        <span>猜你喜欢</span>
       </div>
-      <div style="padding: 20px 0;">
-        <span style="color: #9f8f8d; font-size: 14px">数量：</span>
-        <el-input-number size="mini" v-model="num" :min=0 :max='DataSource.stock' @change="handleChange"></el-input-number>
-      </div>
-      <div style="padding: 20px 0;color: #9f8f8d;">
-        <span style="color: #9f8f8d; font-size: 14px">当前仅剩：</span> <span style="color: red; font-size: 24px">{{DataSource.stock}}</span> 本
-      </div>
-      <div class="clearfix" style="padding: 20px 0;">
-        <el-button type="danger" class="button" @click="addToCart(DataSource.id, num)">加入购物车</el-button>
-        <el-button type="danger" class="button" @click="Buy()">立即购买</el-button>
-      </div>
-    </el-col>
+      <el-col :span="6" v-for="(item, index) in recommendArr" :key="item.Book_ID">
+        <el-card :body-style="{ padding: '0px' }" class="card-item">
+          <img class="image" v-lazy="item.Book_Img">
+          <div style="padding: 0px;">
+            <span>{{item.Book_Name.length>16?item.Book_Name.substring(0,16)+'...':item.Book_Name}}</span>
+            <div class="bottom clearfix">
+              <el-button type="text" class="button" @click="showInfo(item.Book_ID)">查看详情</el-button>
+              <el-button type="text" class="button" @click="addToCart(item.Book_ID)" v-if="item.Book_Stock !==0">加入购物车</el-button>
+              <el-button type="text" v-else disabled>已售完</el-button>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+    </el-footer>
     <el-dialog  title="填写订单" :visible.syc="dialogVisible" @close="handleCloseDialog">
       <el-form :model="dialog" label-width="120px">
         <el-form-item label="商品名称" prop="name">
@@ -62,8 +82,11 @@
   import http from '../../../assets/js/http'
   import common from '../../../assets/js/common'
   import ElContainer from "element-ui/packages/container/src/main";
+  import ElFooter from "element-ui/packages/footer/src/main";
   export default {
-    components: {ElContainer},
+    components: {
+      ElFooter,
+      ElContainer},
     name: "goods",
     data() {
       return {
@@ -72,7 +95,9 @@
         dialogVisible: false,
         dialog: {},
         address: [],
-        curAddress: ''
+        curAddress: '',
+        user: {},
+        recommendArr: []
       }
     },
     methods: {
@@ -165,15 +190,64 @@
             this.$message.error('购买失败')
           }
         })
+      },
+      recommend(history) {
+        let obj = {
+          books: history
+        }
+        this.apiPost('admin/base/recommend',obj).then(res => {
+          if(res.code === 200){
+            let recommend = []
+            if (res.data.length > 12) {
+              let indexArr = []
+              for(let i=0;indexArr.length<12;i++){
+                indexArr.push(Math.floor(Math.random()*res.data.length))
+                indexArr = Array.from(new Set(indexArr))
+              }
+              for(let j=0;j<indexArr.length;j++){
+                console.log(indexArr)
+                console.log(indexArr[j])
+                recommend.push(res.data[indexArr[j]])
+              }
+            } else {
+              for(let i=0;i<res.data.length;i++){
+                recommend.push(res.data[i])
+              }
+            }
+            for(let i=0;i<recommend.length;i++){
+              this.recommendArr.push(recommend[i])
+            }
+            // this.recommendArr = recommend
+            console.log(this.recommendArr)
+          } else {
+            this.$message.error(res.msg)
+          }
+        })
       }
     },
     mounted(){
       this.loadBook()
+      this.user = JSON.parse(sessionStorage.getItem('user'))
+      if(this.user && JSON.parse(sessionStorage.getItem('history'))){
+        let history = JSON.parse(sessionStorage.getItem('history'))
+        this.recommend(history)
+      }
     },
     mixins: [http,common]
   }
 </script>
 
 <style scoped>
-
+  .card-item:hover{
+    transform: translateY(-3px);
+    box-shadow: 1px 1px 20px #999;
+  }
+  .lines{
+    padding: 0 20px 0;
+    margin: 20px 0;
+    line-height: 2px;
+    border-left: 580px solid rgb(58,59,72);
+    border-right: 580px solid rgb(58,59,72);
+    text-align: center;
+  }
 </style>
