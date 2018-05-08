@@ -17,7 +17,7 @@
         </el-col>
         <el-col :span="5" :offset="3">
           <el-input
-            placeholder="用户账号"
+            placeholder="用户昵称"
             v-model="name"
             clearable>
           </el-input>

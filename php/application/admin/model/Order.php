@@ -29,7 +29,7 @@
         $today =  date("Y-m-d");
         try
         {
-            $res = Db::query('SELECT * FROM books.Order_List where Order_Status = "已完成" AND Order_EndTime BETWEEN :yesterday AND :today ORDER BY Order_Price DESC',['yesterday' => $time, 'today' => $today]);
+            $res = Db::query('SELECT * FROM books.Order_List where Order_Status = "已完成" AND Order_EndTime BETWEEN :yesterday AND :today ORDER BY Order_EndTime',['yesterday' => $time, 'today' => $today]);
 
         } catch (Exception $e)
         {

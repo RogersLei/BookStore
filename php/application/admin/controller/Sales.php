@@ -26,8 +26,11 @@ class Sales extends Common
     {
       $order = model('Order');
       $timeline = input('timeline');
-      $data = $order->getSalesByTimeline($timeline);
-      return json_encode($data);
+      if($timeline !== null)
+      {
+        $data = $order->getSalesByTimeline($timeline);
+        return json_encode($data);
+      }
     }
 
     public function searchOrder()

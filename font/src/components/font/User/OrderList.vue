@@ -139,8 +139,10 @@
         }).then(() => {
           this.apiPost('font/base/deleteOrderByID', {id: row.Order_ID}).then((res) => {
             if (res.code == 200) {
-              this.$message.success('删除成功')
-              this.$router.go(this.$route.path)
+              this.$message.success('取消订单成功')
+              setTimeout(()=>{
+                this.$router.go(this.$route.fullPath)
+              },1000)
             }
           })
         }).catch(() => {
