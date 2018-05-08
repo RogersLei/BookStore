@@ -67,27 +67,45 @@
           timeline: timeline
         }
         this.apiPost('admin/sales/getSalesByTimeline',obj).then(res => {
-          console.log(res)
+          this.drawLine(res)
         })
       },
-      drawLine: function (timeline) {
+      drawLine: function (data) {
+        let dateList = data.map(item => {
+          return item.Order_EndTime.split(' ')[0]
+        })
+        let valueList = data.map(item => {
+          return +item.Order_Price
+        })
+        // start 合并相同时间内的销售额
+        let newValueLise = []
+        let index = 0
+        newValueLise[index] = valueList[index]
+        for(let i=1;i<dateList.length;i++){
+          if(dateList[i-1] === dateList[i]){
+            newValueLise[index] = newValueLise[index] + valueList[i]
+          } else {
+            index++
+            newValueLise[index] = valueList[i]
+          }
+        }
+        dateList = Array.from(new Set(dateList))
+        // end
         let myChart = this.$echarts.init(document.getElementById('myChart'),'light')
-        let num = timeline > 7 ? 7: 1
         myChart.setOption({
-          title: { text: `最近${timeline}天` },
+          title: { text: `最近30天` },
           tooltip: {},
           legend: {
-            data:['销量']
+            data:['销售额']
           },
           xAxis: {
-            type:'time',
-            interval: 3600 * 24 * 1000 * num,
+            data:dateList
           },
           yAxis: {},
           series: [{
-            name: '销量',
+            name: '销售额',
             type: 'line',
-            data: [10, 20, 36, 10],
+            data: newValueLise,
             smooth: true,
           }]
         })
@@ -105,7 +123,6 @@
     mounted () {
       this.getYesterdayData()
       this.getData(this.defaultTimeline)
-      this.drawLine(this.defaultTimeline)
     },
     mixins: [http]
   }
