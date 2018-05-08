@@ -1,5 +1,17 @@
 <template>
   <el-container>
+    <el-header>
+      <el-col :span="4" :offset="10">
+        <el-input
+          placeholder="搜索书籍名称"
+          v-model="name"
+          clearable>
+        </el-input>
+      </el-col>
+      <el-col :span="3" :offset="1">
+        <el-button type="primary" @click="search()">搜索</el-button>
+      </el-col>
+    </el-header>
     <el-main>
       <el-col :span="6" v-for="(item, index) in DataSource" :key="item.id">
         <el-card :body-style="{ padding: '0px' }" class="card-item">
@@ -26,6 +38,7 @@
     name: "all",
     data() {
       return {
+        name: '',
         DataSource: [],
       }
     },
@@ -47,6 +60,24 @@
               })
             })
           }
+        })
+      },
+      search() {
+        let obj = {
+          name: this.name
+        }
+        this.apiPost('admin/base/findBookByName',obj).then(res => {
+          this.DataSource = []
+          res.data.forEach(item => {
+            this.DataSource.push({
+              id: item.Book_ID,
+              name: item.Book_Name,
+              sales: item.Book_Sales,
+              src: item.Book_Img,
+              price: item.Book_Price,
+              stock: item.Book_Stock
+            })
+          })
         })
       }
     },

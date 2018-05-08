@@ -85,10 +85,21 @@ class Base extends Common
 
     public function findBookByID()
     {
-        $book = model('book');
+        $book = model('Book');
         $id = input('id');
         $data = $book->findBookByID($id);
         return json_encode($data);
+    }
+
+    public function findBookByName()
+    {
+        $book = model('Book');
+        $name = input('name');
+        if($name !== null)
+        {
+            $data = $book->findBookByName($name);
+            return json_encode($data);
+        }
     }
 
     public function updateBook()

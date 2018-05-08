@@ -34,6 +34,23 @@
 
         }
 
+        public function findBookByName($name)
+        {
+           try
+           {
+               $map['Book_Name'] = ['like','%'.$name.'%'];
+               $value =  Db::table('Book')
+                             ->where($map)
+                             ->select();
+               $res = ["code" => 200, "data" => $value];
+           } catch (Exception $e)
+           {
+               $res = ["code" => 0,"msg" => $e->getMessage()];
+               Db::rollback();// 回滚事务
+           }
+           return $res;
+        }
+
         public function updateBook($id,$name,$num,$price,$type)
         {
             try
