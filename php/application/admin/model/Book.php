@@ -1,7 +1,9 @@
 <?php
 
     namespace app\admin\model;
-
+    require_once(dirname(__FILE__)."/../../../vendor/autoload.php");
+    use PhpOffice\PhpSpreadsheet\Spreadsheet;
+    use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
     use think\Model;
     use think\Db;
     class Book extends Model
@@ -51,11 +53,37 @@
            return $res;
         }
 
+        public function addBook($name,$type,$price,$stock,$des,$img)
+        {
+            try
+            {
+                $Book_TypeID = Db::query('SELECT BookType_ID FROM Book_Type where BookType_Name=:name',['name' => $type]);
+                $Book_TypeID = $Book_TypeID[0]['BookType_ID'];
+                Db::table('Book')
+                    ->insert([
+                        'Book_Name'     =>  $name,
+                        'Book_Price'    =>  $price,
+                        'Book_TypeID'   =>  $Book_TypeID,
+                        'Book_Stock'    =>  $stock,
+                        'Book_Img'      =>  $img,
+                        'Book_Des'      =>  $des
+                    ]);
+                Db::commit();       // 提交事务
+                $res = ["code" => 200, "msg" => "OK"];
+            } catch (Exception $e)
+            {
+                $res = ["code" => 0,"msg" => $e->getMessage()];
+                Db::rollback();// 回滚事务
+            }
+            return json($res);
+        }
+
         public function updateBook($id,$name,$num,$price,$type)
         {
             try
             {
                 $Book_TypeID = Db::query('SELECT BookType_ID FROM Book_Type where BookType_Name=:name',['name' => $type]);
+                $Book_TypeID = $Book_TypeID[0]['BookType_ID'];
                 Db::table('Book')
                     ->where('Book_ID',$id)
                     ->update([
@@ -257,5 +285,65 @@
                 Db::rollback();// 回滚事务
             }
             return $res;
+        }
+
+        public function exportExcel()
+        {
+            $spreadSheet = new Spreadsheet();
+            $time = date("Y/m/d h:i:s");
+            $spreadSheet->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+            $spreadSheet->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+            $spreadSheet->getActiveSheet()->mergeCells('A1:C1');
+            $spreadSheet->getActiveSheet()->mergeCells('D1:G1');
+            $spreadSheet->getActiveSheet()->getStyle('A2')->getFont()->setBold(true);
+            $spreadSheet->getActiveSheet()->getStyle('A2')->getFont()->setSize(12);
+
+            $spreadSheet->getActiveSheet()->getStyle('B2')->getFont()->setBold(true);
+            $spreadSheet->getActiveSheet()->getStyle('B2')->getFont()->setSize(12);
+
+            $spreadSheet->getActiveSheet()->getStyle('C2')->getFont()->setBold(true);
+            $spreadSheet->getActiveSheet()->getStyle('C2')->getFont()->setSize(12);
+
+            $spreadSheet->getActiveSheet()->getStyle('D2')->getFont()->setBold(true);
+            $spreadSheet->getActiveSheet()->getStyle('D2')->getFont()->setSize(12);
+
+            $spreadSheet->getActiveSheet()->getStyle('E2')->getFont()->setBold(true);
+            $spreadSheet->getActiveSheet()->getStyle('E2')->getFont()->setSize(12);
+
+            $sheet = $spreadSheet->getActiveSheet();
+            $sheet->setCellValue('A1', '图书简要信息表格');
+            $sheet->setCellValue('D1', '导出表格时间:'.$time);
+            $sheet->setCellValue('A2', '书名');
+            $sheet->setCellValue('B2', '分类名称');
+            $sheet->setCellValue('C2', '单价');
+            $sheet->setCellValue('D2', '库存');
+            $sheet->setCellValue('E2', '销量');
+            try
+            {
+                $arr =  Db::query('SELECT * FROM Book,Book_Type where Book_TypeID=BookType_ID;');
+
+                forEach($arr as $key => $value)
+                {
+                    $len = strlen($value['Book_Name']);
+                    $sheet->setCellValue('A'.($key+3), $value['Book_Name']);
+                    $sheet->setCellValue('B'.($key+3), $value['BookType_Name']);
+                    $sheet->setCellValue('C'.($key+3), $value['Book_Price']);
+                    $sheet->setCellValue('D'.($key+3), $value['Book_Stock']);
+                    $sheet->setCellValue('E'.($key+3), $value['Book_Sales']);
+                }
+                $name = "books";
+                header('Content-Type: application/vnd.ms-excel; charset=utf8');
+                header("Content-Disposition:attachment;filename={$name}.xls");
+                header('Cache-Control: max-age=0');
+
+                $writer = new Xlsx($spreadSheet);
+//                $writer->save('php://output');
+                $writer->save('books.xlsx');
+                $res = ["code" => 200, "data" => $writer];
+            }   catch (Exception $e)
+            {
+                $res = ["code" => 0,"msg" => $e->getMessage()];
+            }
+            return json($res);
         }
     }

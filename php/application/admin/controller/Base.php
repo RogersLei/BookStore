@@ -102,6 +102,22 @@ class Base extends Common
         }
     }
 
+    public function addBook()
+    {
+        $book = model('Book');
+        $name = input('name');
+        $tag = input('tag');
+        $price = input('price');
+        $stock = input('num');
+        $des = input('des');
+        $img = input('img');
+        if($name !== null && $tag !== null && $price !== null && $stock !== null && $des !== null && $img !== null)
+        {
+            $data = $book->addBook($name,$tag,$price,$stock,$des,$img);
+            return $data;
+        }
+    }
+
     public function updateBook()
     {
         $book = model('Book');
@@ -202,6 +218,17 @@ class Base extends Common
         {
             $data = $book->recommend($arr);
             return json_encode($data);
+        }
+    }
+
+    public function exportExcel()
+    {
+        $book = model('Book');
+        $post = input('post');
+        if($post !== null)
+        {
+            $data = $book->exportExcel();
+            return $data;
         }
     }
 }

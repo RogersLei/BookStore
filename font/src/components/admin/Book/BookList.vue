@@ -1,9 +1,11 @@
 <template>
   <el-container style="min-width: 1020px">
-    <el-header>
+    <el-header style="margin-top: 20px;">
+      <el-button type="primary" style="float: left" @click="addBook()">添加书籍</el-button>
       <el-autocomplete placeholder="请输入内容" suffix-icon="el-icon-search"
                        v-model="searchBook" :fetch-suggestions="queryBook"  @select="handleSelect">
       </el-autocomplete>
+      <el-button type="primary" style="float: right" @click="exportExcel()">导出为excel表格</el-button>
     </el-header>
     <el-main>
       <el-table :data=" filter == true ? tableData : tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
@@ -56,6 +58,34 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+    <el-dialog  title="添加书籍信息" :visible.syc="dialogAddVisible" @close="handleCloseAddDialog">
+      <el-form>
+        <el-form-item label="书籍名称">
+          <el-input type="text" v-model="dialogAdd.name"></el-input>
+        </el-form-item>
+        <el-form-item label="书籍库存">
+          <el-input type="text" v-model="dialogAdd.num"></el-input>
+        </el-form-item>
+        <el-form-item label="书籍价格">
+          <el-input type="text" v-model="dialogAdd.price"></el-input>
+        </el-form-item>
+        <el-form-item label="书籍描述">
+          <el-input type="text" v-model="dialogAdd.des"></el-input>
+        </el-form-item>
+        <el-form-item label="书籍图片地址">
+          <el-input type="text" v-model="dialogAdd.img"></el-input>
+        </el-form-item>
+        <el-form-item style="width: 100%" label="书籍分类">
+          <el-select v-model="dialogAdd.tag">
+            <el-option v-for="item in tagData" :value="item.value" :key="item.value"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item style="width: 100%">
+          <el-button type="info" @click="handleCloseAddDialog">取消</el-button>
+          <el-button type="primary" @click="handleMakeAdd()">提交</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </el-container>
 </template>
 
@@ -79,7 +109,9 @@
           filter: false,
           loading: true,
           dialogVisible: false,
+          dialogAddVisible: false,
           dialog: {},
+          dialogAdd: {},
           showPage: true
         }
       },
@@ -153,6 +185,40 @@
           })
 
         },
+        addBook () {
+          this.dialogAddVisible = true
+        },
+        handleMakeAdd () {
+          let obj = Object.assign({},this.dialogAdd)
+          this.apiPost('admin/base/addBook',obj).then(res => {
+            if(res.code === 200) {
+              this.$message.success('添加成功')
+              setTimeout(() => {
+                 this.$router.go(this.$route.fullPath)
+              },1000)
+            } else {
+              this.$message.error('添加失败')
+            }
+          })
+        },
+        handleCloseAddDialog () {
+          this.dialogAddVisible = false
+          this.dialogAdd = {}
+        },
+        exportExcel () {
+          let obj = {
+            post : "post"
+          }
+          this.apiPostExcel('admin/base/exportExcel',obj).then(res => {
+            if (res.code === 200){
+              let blob = new Blob([res.data], { type: 'application/x-xls' })
+              console.log(blob)
+              this.$message.success('导出成功')
+            } else {
+              this.$message.error('导出失败')
+            }
+          })
+        }
       },
       mounted() {
         this.loadBook()
