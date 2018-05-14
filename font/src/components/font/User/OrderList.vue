@@ -119,7 +119,12 @@
           this.apiPost('font/pay/Pay', obj).then((res) => {
             if (res.code === 200) {
               this.$message.success('付款成功')
-              this.$router.go(this.$route.path)
+              let user = JSON.parse(sessionStorage.getItem('user'))
+              user.balance = user.balance - obj.price
+              sessionStorage.setItem('user',JSON.stringify(user))
+              setInterval(()=>{
+                this.$router.go(this.$route.path)
+              },1000)
             } else {
               this.$message.error(res.msg)
             }

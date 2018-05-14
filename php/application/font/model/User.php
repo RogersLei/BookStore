@@ -19,7 +19,7 @@
                     if(password_verify($checkPass, $old_pwd)){
                         try
                         {
-                            $res = ["code" => 200, "msg" => '验证成功', "name" => $user['User_Name'], "img" => $user['User_Img']];
+                            $res = ["code" => 200, "msg" => '验证成功', "data" => $user];
                         }  catch (Exception $e)
                         {
                             $res = ["code" => 0,"msg" => $e->getMessage()];
@@ -57,8 +57,13 @@
             return json($res);
         }
 
-        public function updateUser($account, $name, $src, $pass)
+        public function updateUser($account, $name, $src, $pass, $newBalance)
         {
+            $user = Db::table('User')
+                          ->where('User_Account',$account)
+                          ->find();
+            $oldB = $user['User_Balance'];
+            $newB = $oldB + $newBalance;
             if($pass === ''){
                 try
                 {
@@ -67,6 +72,7 @@
                         ->update([
                             'User_Name'      =>  $name,
                             'User_Img'       =>  $src,
+                            'User_Balance'   =>  $newB
                         ]);
                     Db::commit();       // 提交事务
                     $res = ["code" => 200, "msg" => "OK"];
@@ -84,7 +90,8 @@
                         ->update([
                             'User_Name'      =>  $name,
                             'User_Img'       =>  $src,
-                            'User_Pwd'       =>  $pass
+                            'User_Pwd'       =>  $pass,
+                            'User_Balance'   =>  $newB
                         ]);
                     Db::commit();       // 提交事务
                     $res = ["code" => 200, "msg" => "OK"];

@@ -39,10 +39,11 @@ class Base extends Common
         $name = input('name');
         $src = input('src');
         $pass = input('pass');
+        $newBalance = input('newBalance');
         if($pass !== ""){
             $pass = password_hash($pass, PASSWORD_DEFAULT);
         }
-        $data = $user->updateUser($account, $name, $src, $pass);
+        $data = $user->updateUser($account, $name, $src, $pass, $newBalance);
         return $data;
     }
 

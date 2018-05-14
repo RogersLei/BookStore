@@ -95,46 +95,74 @@
 
      public function Pay($id,$books,$price)
      {
-        foreach ($books as $key => $value){
-          $bookID = $value['id'];
-          $num = (int)$value['num'];
-          try
-          {
-            $book = Db::table('Book')
-                        ->where('Book_ID',$bookID)
+          $user = Db::table('Order_List')
+                        ->where('Order_Id',$id)
                         ->find();
-            $stock = $book['Book_Stock'];
-            $newstock = $stock-$num;
-            if($newstock >= 0)
-            {
-              Db::startTrans();
-              try
-              {
-                Db::table('Book')
-                    ->where('Book_ID', $bookID)
-                    ->update(['Book_Stock' => $newstock]);
-                Db::commit();
+          $userID = $user['Order_User'];
+          $User = Db::table('User')
+                        ->where('User_ID',$userID)
+                        ->find();
+          $oldB = $User['User_Balance'];
+          $newB = $oldB - $price;
+          if($newB>=0)
+          {
+              foreach ($books as $key => $value){
+                $bookID = $value['id'];
+                $num = (int)$value['num'];
+                try
+                {
+                  $book = Db::table('Book')
+                              ->where('Book_ID',$bookID)
+                              ->find();
+                  $stock = $book['Book_Stock'];
+                  $newstock = $stock-$num;
+                  if($newstock >= 0)
+                  {
+                    Db::startTrans();
+                    try
+                    {
+                      Db::table('Book')
+                          ->where('Book_ID', $bookID)
+                          ->update(['Book_Stock' => $newstock]);
+                      Db::commit();
+                      $flag = true;
+                    } catch (Exception $e)
+                    {
+                      $res = ["code" => 0,"msg" => $e->getMessage()];
+                      $flag = false;
+                      Db::rollback();// 回滚事务
+                    }
+                  } else
+                  {
+                    $res = ["code" => 0,"msg" => '库存不足'];
+                    $flag = false;
+                  }
+                } catch (Exception $e)
+                {
+                  $res = ["code" => 0,"msg" => $e->getMessage()];
+                  $flag = false;
+                  Db::rollback();// 回滚事务
+                }
+              }
+          } else
+          {
+            $flag = false;
+            $res = ["code" => 0, "msg" => "账户余额不足"];
+          }
+
+
+          if($flag)
+          {
                 Db::table('Order_List')
                     ->where('Order_ID', $id)
                     ->update(['Order_Status' => '待发货']);
+                Db::table('User')
+                      ->where('User_ID',$userID)
+                      ->update(['User_Balance' => $newB]);
                 Db::commit();
                 $res = ["code" => 200, "msg" => "OK"];
-              } catch (Exception $e)
-              {
-                $res = ["code" => 0,"msg" => $e->getMessage()];
-                Db::rollback();// 回滚事务
-              }
-            } else
-            {
-              $res = ["code" => 0,"msg" => '库存不足'];
-            }
-          } catch (Exception $e)
-          {
-            $res = ["code" => 0,"msg" => $e->getMessage()];
-            Db::rollback();// 回滚事务
           }
-        }
-        return json($res);
+          return json($res);
      }
 
      public function finishOrder($id)

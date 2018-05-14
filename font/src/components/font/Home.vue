@@ -170,8 +170,9 @@
           }
           this.apiPost('font/base/login',user).then((res) => {
             if(res.code == 200){
-              user.name = res.name
-              user.src = res.img
+              user.name = res.data.User_Name
+              user.src = res.data.User_Img
+              user.balance = res.data.User_Balance
               delete user.pass
               sessionStorage.setItem('user', JSON.stringify(user));
               this.dialogVisibleLog = false
